@@ -13,9 +13,9 @@ struct K {
     static let cellNibName = "PropertyCell"
     
     struct segues {
-        static let toHistorySegue = "toHistory"
-        static let toDetailsSegue = "historyToDetails"
-        static let toPropertiesSegue = "toProperties"
-        static let toCookingSegue = "toCooking"
+        static let historySegue = "toHistory"
+        static let detailsSegue = "historyToDetails"
+        static let propertiesSegue = "toProperties"
+        static let cookingSegue = "toCooking"
     }
 }

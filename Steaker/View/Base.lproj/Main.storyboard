@@ -33,6 +33,9 @@
                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="30" scale="large"/>
                                 </state>
                                 <connections>
+                                    <action selector="previousCookingButtonExit:" destination="BYZ-38-t0r" eventType="touchDragExit" id="yZF-hr-A7C"/>
+                                    <action selector="previousCookingButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="tcz-Sg-4Ml"/>
+                                    <action selector="previousCookingButtonTouched:" destination="BYZ-38-t0r" eventType="touchDown" id="Vwg-i3-Nmj"/>
                                     <segue destination="U5P-dU-lYz" kind="show" identifier="toHistory" id="NNR-Fu-1VZ"/>
                                 </connections>
                             </button>
@@ -43,6 +46,9 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
+                                    <action selector="startCookingButtonExit:" destination="BYZ-38-t0r" eventType="touchDragExit" id="AN0-Wl-AxY"/>
+                                    <action selector="startCookingButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="k2L-gE-yom"/>
+                                    <action selector="startCookingButtonTouched:" destination="BYZ-38-t0r" eventType="touchDown" id="3r5-vx-ai9"/>
                                     <segue destination="pnL-5N-pFV" kind="show" identifier="toProperties" id="46A-FJ-7EF"/>
                                 </connections>
                             </button>
@@ -87,7 +93,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="ech-be-pnQ">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="ech-be-pnQ" customClass="SwipeTableViewCell" customModule="SwipeCellKit">
                                 <rect key="frame" x="0.0" y="28" width="375" height="43.666667938232422"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ech-be-pnQ" id="WFR-Gf-ul0">
@@ -98,7 +104,11 @@
                         </prototypes>
                     </tableView>
                     <navigationItem key="navigationItem" title="History" id="UrY-2W-67n">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="be7-jd-39k"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="be7-jd-39k">
+                            <connections>
+                                <action selector="addButtonPressed:" destination="U5P-dU-lYz" id="x33-c7-pJU"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <segue destination="Dka-dy-P8x" kind="showDetail" identifier="historyToDetails" id="kXe-71-a7D"/>
@@ -112,15 +122,29 @@
         <scene sceneID="tyD-gV-aZ5">
             <objects>
                 <tableViewController id="Dka-dy-P8x" customClass="DetailsViewController" customModule="Steaker" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="w8H-jL-EeV">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="w8H-jL-EeV">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <button key="tableFooterView" opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="W0O-y6-pnW">
+                            <rect key="frame" x="0.0" y="99.666667938232422" width="375" height="22"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="BradleyHandITCTT-Bold" family="Bradley Hand" pointSize="30"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <state key="normal" title="Add new property " image="plus" catalog="system">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <connections>
+                                <action selector="addButtonPressed:" destination="Dka-dy-P8x" eventType="touchUpInside" id="BAS-lp-B9z"/>
+                                <action selector="addNewButtonExit:" destination="Dka-dy-P8x" eventType="touchDragExit" id="Bf7-Qu-dHr"/>
+                                <action selector="addNewButtonTouched:" destination="Dka-dy-P8x" eventType="touchDown" id="Ls6-pJ-h4i"/>
+                            </connections>
+                        </button>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="9Xx-pK-y4v">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="bim-ET-ZVY" customClass="SwipeTableViewCell" customModule="SwipeCellKit">
                                 <rect key="frame" x="0.0" y="28" width="375" height="43.666667938232422"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="9Xx-pK-y4v" id="VSd-XO-mVY">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bim-ET-ZVY" id="ayT-Eb-5iA">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.666667938232422"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
@@ -131,6 +155,9 @@
                             <outlet property="delegate" destination="Dka-dy-P8x" id="mcp-Y6-6wM"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <outlet property="addPropertyButton" destination="W0O-y6-pnW" id="Vux-MA-hZf"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="z1R-jc-lNX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -149,17 +176,19 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" name="BradleyHandITCTT-Bold" family="Bradley Hand" pointSize="60"/>
-                            <state key="normal" title="Cook!">
+                            <state key="normal" title="next">
                                 <color key="titleColor" red="0.92085830479452058" green="0.35745225459452062" blue="0.4817441106" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <connections>
-                                <action selector="cookButtonPressed:" destination="pnL-5N-pFV" eventType="touchUpInside" id="S1S-qc-CiH"/>
+                                <action selector="nextButtonExit:" destination="pnL-5N-pFV" eventType="touchDragExit" id="zuH-ht-IAY"/>
+                                <action selector="nextButtonPressed:" destination="pnL-5N-pFV" eventType="touchUpInside" id="D7H-D3-IFa"/>
+                                <action selector="nextButtonTouched:" destination="pnL-5N-pFV" eventType="touchDown" id="Ji4-CQ-lIi"/>
                             </connections>
                         </button>
                     </tableView>
                     <navigationItem key="navigationItem" title="Prepare" id="k9n-uD-duU"/>
                     <connections>
-                        <outlet property="cookButton" destination="dKB-O2-0TA" id="RAV-TO-WIR"/>
+                        <outlet property="nextButton" destination="dKB-O2-0TA" id="ou9-1b-027"/>
                         <segue destination="P58-Mj-PBD" kind="show" identifier="toCooking" id="INX-z7-fq9"/>
                     </connections>
                 </viewController>
@@ -167,21 +196,82 @@
             </objects>
             <point key="canvasLocation" x="1900" y="101.23152709359606"/>
         </scene>
-        <!--Cooking View Controller-->
+        <!--Cooking-->
         <scene sceneID="6CZ-jI-TCr">
             <objects>
                 <viewController id="P58-Mj-PBD" customClass="CookingViewController" customModule="Steaker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="QyQ-wb-hZf">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Background" translatesAutoresizingMaskIntoConstraints="NO" id="rPp-fK-6Mf">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                            </imageView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="IdO-vZ-azH">
+                                <rect key="frame" x="20" y="138" width="335" height="590"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="vYH-7K-Zl4">
+                                        <rect key="frame" x="31" y="0.0" width="273" height="244.66666666666666"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Timer" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Xo-sc-sdZ">
+                                                <rect key="frame" x="0.0" y="0.0" width="273" height="219"/>
+                                                <fontDescription key="fontDescription" name="Charter-Bold" family="Charter" pointSize="100"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Turns left at high temp" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iiB-DO-dj7">
+                                                <rect key="frame" x="30.666666666666671" y="220" width="211.66666666666663" height="24.666666666666657"/>
+                                                <fontDescription key="fontDescription" name="Charter-Bold" family="Charter" pointSize="20"/>
+                                                <color key="textColor" systemColor="systemGray6Color" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                    <progressView opaque="NO" contentMode="scaleAspectFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="32B-pi-6de">
+                                        <rect key="frame" x="10" y="304.66666666666669" width="315" height="3.3333333333333144"/>
+                                        <color key="progressTintColor" red="0.0" green="0.92535316779999999" blue="0.54858376139999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </progressView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="IhF-j2-Ubh">
+                                        <rect key="frame" x="0.0" y="368" width="335" height="222"/>
+                                        <fontDescription key="fontDescription" name="BradleyHandITCTT-Bold" family="Bradley Hand" pointSize="60"/>
+                                        <state key="normal" title="Cook high temp!">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="cookButtonPressed:" destination="P58-Mj-PBD" eventType="touchUpInside" id="3XO-6y-zVI"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="32B-pi-6de" firstAttribute="leading" secondItem="IdO-vZ-azH" secondAttribute="leading" constant="10" id="HpD-To-bE1"/>
+                                    <constraint firstAttribute="trailing" secondItem="32B-pi-6de" secondAttribute="trailing" constant="10" id="nPA-v6-hZp"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="IdO-vZ-azH" firstAttribute="top" secondItem="yWt-fN-K2y" secondAttribute="top" constant="50" id="AVq-Zy-Dnb"/>
+                            <constraint firstItem="IdO-vZ-azH" firstAttribute="leading" secondItem="yWt-fN-K2y" secondAttribute="leading" constant="20" id="CGV-Ia-cgS"/>
+                            <constraint firstItem="yWt-fN-K2y" firstAttribute="bottom" secondItem="IdO-vZ-azH" secondAttribute="bottom" constant="50" id="LIs-aI-d1K"/>
+                            <constraint firstItem="rPp-fK-6Mf" firstAttribute="leading" secondItem="QyQ-wb-hZf" secondAttribute="leading" id="Pas-1G-NIz"/>
+                            <constraint firstItem="rPp-fK-6Mf" firstAttribute="bottom" secondItem="QyQ-wb-hZf" secondAttribute="bottom" id="T0m-KM-fLY"/>
+                            <constraint firstItem="yWt-fN-K2y" firstAttribute="trailing" secondItem="IdO-vZ-azH" secondAttribute="trailing" constant="20" id="VkE-xE-o6E"/>
+                            <constraint firstAttribute="trailing" secondItem="rPp-fK-6Mf" secondAttribute="trailing" id="jpj-79-Snp"/>
+                            <constraint firstItem="rPp-fK-6Mf" firstAttribute="top" secondItem="QyQ-wb-hZf" secondAttribute="top" id="y7n-qa-PhC"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="yWt-fN-K2y"/>
                     </view>
-                    <navigationItem key="navigationItem" id="gZX-Lm-fqj"/>
+                    <navigationItem key="navigationItem" title="Cooking" id="gZX-Lm-fqj"/>
+                    <connections>
+                        <outlet property="cookButton" destination="IhF-j2-Ubh" id="C2D-QH-QE5"/>
+                        <outlet property="timerLabel" destination="3Xo-sc-sdZ" id="z0b-rh-4bX"/>
+                        <outlet property="timerProgressView" destination="32B-pi-6de" id="0vq-ao-xzX"/>
+                        <outlet property="turnsLeftLabel" destination="iiB-DO-dj7" id="WG1-JN-AfQ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9mS-Za-5u2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2770" y="101"/>
+            <point key="canvasLocation" x="2768.8000000000002" y="100.49261083743843"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="dLW-Id-QYR">
@@ -220,5 +310,6 @@
         <image name="Background" width="400" height="400"/>
         <image name="book.fill" catalog="system" width="128" height="100"/>
         <image name="meat" width="442.66665649414062" height="369.33334350585938"/>
+        <image name="plus" catalog="system" width="128" height="113"/>
     </resources>
 </document>

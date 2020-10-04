@@ -9,22 +9,25 @@
 import UIKit
 
 class PropertiesViewController: UITableViewController {
-    @IBOutlet weak var cookButton: UIButton!
+
     
+    @IBOutlet weak var nextButton: UIButton!
     var propertiesBrain = PropertyBrain()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        cookButton.layer.masksToBounds = true
-        cookButton.layer.cornerRadius = cookButton.frame.size.height / 5
+        nextButton.layer.masksToBounds = true
+        nextButton.layer.cornerRadius = nextButton.frame.size.height / 5
         
         tableView.rowHeight = 60
         
         tableView.register(UINib(nibName: K.cellNibName, bundle: nil), forCellReuseIdentifier: K.cellIdentifier)
+        
     }
-
+    
+    
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -44,19 +47,45 @@ class PropertiesViewController: UITableViewController {
         return cell
     }
     
-    @IBAction func cookButtonPressed(_ sender: UIButton) {
-        let conditionTime = Int(propertiesBrain.properties[0].time) ?? 0
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+       return 50
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+       let footerView = UIView()
+        footerView.backgroundColor = UIColor.clear
+       return footerView
+    }
+    
+    @IBAction func nextButtonPressed(_ sender: UIButton) {
+        sender.alpha = 1
+        let highTempTime = Int(propertiesBrain.properties[0].time) ?? 0
+        let highTempTurns = Int(propertiesBrain.properties[1].time) ?? 0
         
-        if conditionTime > 0 {
-        performSegue(withIdentifier: K.segues.toCookingSegue, sender: self)
+        if highTempTime > 0 && highTempTurns > 0 {
+        performSegue(withIdentifier: K.segues.cookingSegue, sender: self)
+        } else {
+            
         }
     }
     
+    @IBAction func nextButtonTouched(_ sender: UIButton) {
+        sender.alpha = 0.5
+    }
+    
+    @IBAction func nextButtonExit(_ sender: UIButton) {
+        sender.alpha = 1
+    }
+    
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == "toCooking" {
+        if segue.identifier == K.segues.cookingSegue {
             let destinationVC = segue.destination as! CookingViewController
-            destinationVC.highTemperatureTime = propertiesBrain.properties[0].time
+            destinationVC.highTempTime = propertiesBrain.properties[0].time
+            destinationVC.highTempTurns = propertiesBrain.properties[1].time
+            destinationVC.lowTempTime = propertiesBrain.properties[2].time
+            destinationVC.lowTempTurns = propertiesBrain.properties[3].time
         }
     }
     
@@ -67,6 +96,9 @@ class PropertiesViewController: UITableViewController {
 extension PropertiesViewController: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.text = ""
+        textField.placeholder = "0"
+        textField.addDoneButtonOnKeyboard()
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -78,9 +110,43 @@ extension PropertiesViewController: UITextFieldDelegate {
         propertiesBrain.properties[row].time = textField.text!
     }
     
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
-    
 }
+
+extension UITextField{
+    @IBInspectable var doneAccessory: Bool{
+        get{
+            return self.doneAccessory
+        }
+        set (hasDone) {
+            if hasDone{
+                addDoneButtonOnKeyboard()
+            }
+        }
+    }
+    
+    func addDoneButtonOnKeyboard()
+    {
+        let doneToolbar: UIToolbar = UIToolbar(frame: CGRect.init(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
+        doneToolbar.barStyle = .default
+        
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let done: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.doneButtonAction))
+        
+        let items = [flexSpace, done]
+        doneToolbar.items = items
+        doneToolbar.sizeToFit()
+        
+        self.inputAccessoryView = doneToolbar
+    }
+    
+    @objc func doneButtonAction()
+    {
+        self.resignFirstResponder()
+    }
+}
+

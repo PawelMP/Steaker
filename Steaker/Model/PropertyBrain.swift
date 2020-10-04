@@ -10,8 +10,9 @@ import Foundation
 
 struct PropertyBrain {
     var properties = [
-                Property(title: " High temperature cooking time per turn [s] "),
-                Property(title: " Number of turns at high temperature "),
-                Property(title: " Low temperature cooking time per turn [s] ")
+                Property(title: " High temperature frying time per side [s] "),
+                Property(title: " Amount of frying on the same side at high temp "),
+                Property(title: " Low temperature frying time per side [s] "),
+                Property(title: " Amount of frying on the same side at low temp ")
     ]
 }

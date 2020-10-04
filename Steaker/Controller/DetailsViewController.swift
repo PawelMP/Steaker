@@ -7,84 +7,146 @@
 //
 
 import UIKit
+import RealmSwift
 
-class DetailsViewController: UITableViewController {
-
+class DetailsViewController: SwipeTableViewController {
+    
+    let realm = try! Realm()
+    var steakItems: Results<HistoryItem>?
+    
+    var selectedSteak: History? {
+        didSet {
+            loadItems()
+        }
+    }
+    
+    @IBOutlet weak var addPropertyButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        addPropertyButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        
+        let backgroundImage = UIImage(named: "Background.png")
+        let imageView = UIImageView(image: backgroundImage)
+        imageView.contentMode = .scaleAspectFill
+        self.tableView.backgroundView = UIImageView(image: backgroundImage)
+        
+        tableView.separatorStyle = .singleLine
+        tableView.separatorColor = UIColor.black
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5);
+       
+//        tableView.tableFooterView = UIView(frame: CGRectZero)
+    }
+    
+    @IBAction func addNewButtonTouched(_ sender: UIButton) {
+        sender.alpha = 0.5
+    }
+    
+    @IBAction func addNewButtonExit(_ sender: UIButton) {
+        sender.alpha = 1
+    }
+    
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        return steakItems?.count ?? 1
     }
 
-    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
 
-        // Configure the cell...
-
+        //let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        
+        cell.textLabel?.adjustsFontSizeToFitWidth = true
+        cell.textLabel?.text = steakItems?[indexPath.row].title ?? "No added properties yet"
+        cell.textLabel?.textColor = UIColor.white
+        //cell.textLabel?.font = UIFont(name: "Copperplate", size: 20)
+        
         return cell
     }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = UIColor(white: 0, alpha: 0.05)
     }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+       return 50
     }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
+    
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+       let footerView = UIView()
+        footerView.backgroundColor = UIColor.clear
+       return footerView
     }
-    */
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    func loadItems() {
+        steakItems = selectedSteak?.items.sorted(byKeyPath: "dateCreated", ascending: true)
+        tableView.reloadData()
     }
-    */
-
+    
+    override func updateModel(at indexPath: IndexPath) {
+        if let categoryForDeletion = self.steakItems?[indexPath.row] {
+            do {
+                try self.realm.write {
+                    self.realm.delete(categoryForDeletion)
+                }
+            } catch {
+                print("Error deleting category context \(error)")
+            }
+            //tableView.reloadData()
+        }
+    }
+    
+    
+    @IBAction func addButtonPressed(_ sender: UIButton) {
+        sender.alpha = 1
+        var textField = UITextField()
+        
+        //New alert with title
+        let alert = UIAlertController(title: "Add a steak property", message: "", preferredStyle: .alert)
+        
+        //Textfield for this alert
+        alert.addTextField { (alertTextField) in
+            alertTextField.placeholder = "Add new property"
+            alertTextField.autocapitalizationType = .sentences
+            textField = alertTextField
+        }
+        
+        //Press add button on the alert window
+        alert.addAction(UIAlertAction(title: "Add", style: .default, handler: { (UIAlertAction) in
+            
+            if textField.text != "" {
+                if let currentSteak = self.selectedSteak {
+                   do {
+                       try self.realm.write() {
+                            let newPropertyItem = HistoryItem()
+                            newPropertyItem.title = " " + textField.text! + " "
+                            currentSteak.items.append(newPropertyItem)
+                       }
+                   } catch {
+                       print("Error adding new category \(error)")
+                   }
+                }
+                self.tableView.reloadData()
+            }
+        }))
+        
+        //Press cancel button on the alert window
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: { (UIAlertAction) in
+        }))
+        
+        //Present alert
+        present(alert, animated: true)
+        
+    }
+    
 }

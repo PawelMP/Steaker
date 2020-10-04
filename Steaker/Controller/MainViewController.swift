@@ -16,11 +16,35 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        //previousCookingButton.titleLabel?.adjustsFontForContentSizeCategory = true
+
         previousCookingButton.titleLabel?.adjustsFontSizeToFitWidth = true
         startCookingButton.titleLabel?.adjustsFontSizeToFitWidth = true
     }
+    
 
+    @IBAction func startCookingButtonPressed(_ sender: UIButton) {
+        sender.alpha = 1
+    }
+    
+    @IBAction func startCookingButtonTouched(_ sender: UIButton) {
+        sender.alpha = 0.5
+    }
+    
+    @IBAction func startCookingButtonExit(_ sender: UIButton) {
+        sender.alpha = 1
+    }
+    
+    @IBAction func previousCookingButtonPressed(_ sender: UIButton) {
+        sender.alpha = 1
+    }
+    
+    @IBAction func previousCookingButtonTouched(_ sender: UIButton) {
+        sender.alpha = 0.5
+    }
+    
+    @IBAction func previousCookingButtonExit(_ sender: UIButton) {
+        sender.alpha = 1
+    }
+    
 }
 

@@ -7,88 +7,117 @@
 //
 
 import UIKit
+import RealmSwift
 
-class HistoryViewController: UITableViewController {
-
-    let historyArray = ["Polędwica",
-                        "Antrykot",
-                        "Rostbef"
-    ]
+class HistoryViewController: SwipeTableViewController {
+    
+    let realm = try! Realm()
+    
+    var historyArray: Results<History>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        loadHistory()
     }
 
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return historyArray.count
+        return historyArray?.count ?? 1
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-
-        cell.textLabel?.text = historyArray[indexPath.row]
+        //let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        cell.textLabel?.text = historyArray?[indexPath.row].name ?? "No previous steaks cooked yet"
+        //cell.textLabel?.font = UIFont(name: "Copperplate", size: 20)
 
         return cell
     }
     
+    //What to do when user selects row
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: K.segues.toDetailsSegue, sender: self)
+        performSegue(withIdentifier: K.segues.detailsSegue, sender: self)
         tableView.deselectRow(at: indexPath, animated: true)
     }
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }*/
     
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }*/
+    //MARK: - Realm data source methods
     
-
+    //Retrieve data from Realm
+    func loadHistory() {
+        historyArray = realm.objects(History.self).sorted(byKeyPath: "dateCreated", ascending: true)
+    }
+    
+    //Save data to realm
+    func saveHistory(historyObject: Object) {
+        do {
+        try realm.write(){
+            realm.add(historyObject)
+            }
+        } catch {
+            print("Error saving history item to Realm, \(error)")
+        }
+        tableView.reloadData()
+    }
     
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    //Preparation before navigation to another ViewController
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == K.segues.detailsSegue {
+            let destinationVC = segue.destination as! DetailsViewController
+            if let indexPath = tableView.indexPathForSelectedRow {
+                destinationVC.selectedSteak = historyArray?[indexPath.row]
+            }
+        }
     }
-
+    
+    // Add button on the navigation bar
+    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
+        
+        var textField = UITextField()
+        
+        //New alert with title
+        let alert = UIAlertController(title: "Add new steak cooked to history", message: "", preferredStyle: .alert)
+        
+        //Textfield for this alert
+        alert.addTextField { (alertTextField) in
+            alertTextField.placeholder = "Add new meat"
+            alertTextField.autocapitalizationType = .sentences
+            textField = alertTextField
+        }
+        
+        //Press add button on the alert window
+        alert.addAction(UIAlertAction(title: "Add", style: .default, handler: { (UIAlertAction) in
+            
+            let newHistoryItem = History()
+            if textField.text != "" {
+                newHistoryItem.name = textField.text!
+                self.saveHistory(historyObject: newHistoryItem)
+            }
+        }))
+        
+        //Press cancel button on the alert window
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: { (UIAlertAction) in
+        }))
+        
+        //Present alert
+        present(alert, animated: true)
+        
+    }
+    
+    override func updateModel(at indexPath: IndexPath) {
+        if let categoryForDeletion = self.historyArray?[indexPath.row] {
+            do {
+                try self.realm.write {
+                    self.realm.delete(categoryForDeletion)
+                }
+            } catch {
+                print("Error deleting category context \(error)")
+            }
+            //tableView.reloadData()
+        }
+    }
+    
 }
