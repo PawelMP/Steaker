@@ -32,7 +32,6 @@ class HistoryViewController: SwipeTableViewController {
         //let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         cell.textLabel?.text = historyArray?[indexPath.row].name ?? "No previous steaks cooked yet"
-        //cell.textLabel?.font = UIFont(name: "Copperplate", size: 20)
 
         return cell
     }
@@ -47,7 +46,7 @@ class HistoryViewController: SwipeTableViewController {
     
     //Retrieve data from Realm
     func loadHistory() {
-        historyArray = realm.objects(History.self).sorted(byKeyPath: "dateCreated", ascending: true)
+        historyArray = realm.objects(History.self).sorted(byKeyPath: "dateCreated", ascending: false)
     }
     
     //Save data to realm
@@ -72,14 +71,14 @@ class HistoryViewController: SwipeTableViewController {
             }
         }
     }
-    
+    // MARK: Navigation bar method
     // Add button on the navigation bar
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
         var textField = UITextField()
         
         //New alert with title
-        let alert = UIAlertController(title: "Add new steak cooked to history", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Add new steak cooked to history", message: nil, preferredStyle: .alert)
         
         //Textfield for this alert
         alert.addTextField { (alertTextField) in
@@ -92,8 +91,9 @@ class HistoryViewController: SwipeTableViewController {
         alert.addAction(UIAlertAction(title: "Add", style: .default, handler: { (UIAlertAction) in
             
             let newHistoryItem = History()
-            if textField.text != "" {
+            if textField.text?.isEmpty == false {
                 newHistoryItem.name = textField.text!
+                newHistoryItem.dateCreated = Date()
                 self.saveHistory(historyObject: newHistoryItem)
             }
         }))
@@ -106,7 +106,7 @@ class HistoryViewController: SwipeTableViewController {
         present(alert, animated: true)
         
     }
-    
+    // MARK: - SwipeTable update method
     override func updateModel(at indexPath: IndexPath) {
         if let categoryForDeletion = self.historyArray?[indexPath.row] {
             do {

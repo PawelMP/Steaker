@@ -19,7 +19,7 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! SwipeTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: K.normalCell, for: indexPath) as! SwipeTableViewCell
         cell.textLabel?.adjustsFontSizeToFitWidth = true
         cell.textLabel?.font = UIFont(name: "Copperplate", size: 20)
         
@@ -48,7 +48,7 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
     }
     
     func updateModel(at indexPath: IndexPath) {
-        //Update our data model.
+        //Update data model
     }
     
 }

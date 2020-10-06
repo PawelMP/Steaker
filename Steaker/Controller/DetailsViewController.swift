@@ -39,7 +39,6 @@ class DetailsViewController: SwipeTableViewController {
         tableView.separatorColor = UIColor.black
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5);
        
-//        tableView.tableFooterView = UIView(frame: CGRectZero)
     }
     
     @IBAction func addNewButtonTouched(_ sender: UIButton) {
@@ -74,7 +73,7 @@ class DetailsViewController: SwipeTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.backgroundColor = UIColor(white: 0, alpha: 0.05)
+        cell.backgroundColor = UIColor(white: 0, alpha: 0.2)
     }
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -86,13 +85,14 @@ class DetailsViewController: SwipeTableViewController {
         footerView.backgroundColor = UIColor.clear
        return footerView
     }
-
     
+    //MARK: - Realm data source methods
     func loadItems() {
-        steakItems = selectedSteak?.items.sorted(byKeyPath: "dateCreated", ascending: true)
+        steakItems = selectedSteak?.items.sorted(byKeyPath: "dateCreated", ascending: false)
         tableView.reloadData()
     }
     
+    // MARK: - SwipeTable update method
     override func updateModel(at indexPath: IndexPath) {
         if let categoryForDeletion = self.steakItems?[indexPath.row] {
             do {
@@ -112,7 +112,7 @@ class DetailsViewController: SwipeTableViewController {
         var textField = UITextField()
         
         //New alert with title
-        let alert = UIAlertController(title: "Add a steak property", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Add a steak property", message: nil, preferredStyle: .alert)
         
         //Textfield for this alert
         alert.addTextField { (alertTextField) in
@@ -124,12 +124,13 @@ class DetailsViewController: SwipeTableViewController {
         //Press add button on the alert window
         alert.addAction(UIAlertAction(title: "Add", style: .default, handler: { (UIAlertAction) in
             
-            if textField.text != "" {
+            if textField.text!.isEmpty == false {
                 if let currentSteak = self.selectedSteak {
                    do {
                        try self.realm.write() {
                             let newPropertyItem = HistoryItem()
                             newPropertyItem.title = " " + textField.text! + " "
+                        newPropertyItem.dateCreated = Date()
                             currentSteak.items.append(newPropertyItem)
                        }
                    } catch {

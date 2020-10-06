@@ -45,7 +45,6 @@ class CookingViewController: UIViewController{
         timerLabel.adjustsFontForContentSizeCategory = true
         turnsLeftLabel.adjustsFontForContentSizeCategory = true
         
-        //turnsLeftLabel.isHidden = true
         updateTurnsLabel(turns: Int(highTempTurns!)!)
         
         timerLabel.text = highTempTime!
@@ -56,10 +55,10 @@ class CookingViewController: UIViewController{
     }
     
     func updateTurnsLabel (turns: Int) {
-        if cookButton.titleLabel?.text == ("Cook high temp!") {
-            turnsLeftLabel.text = "Turns left at high temp: \(turns * 2 - turnsCounter - 1)"
-        } else if cookButton.titleLabel?.text == ("Cook low temp!"){
-            turnsLeftLabel.text = "Turns left at low temp: \(turns * 2 - turnsCounter - 1)"
+        if cookButton.titleLabel?.text == (K.cookHighTemp) {
+            turnsLeftLabel.text = "\(K.turnsLeftAtHighTemp) \(turns * 2 - turnsCounter - 1)"
+        } else if cookButton.titleLabel?.text == (K.cookLowTemp){
+            turnsLeftLabel.text = "\(K.turnsLeftAtHighTemp) \(turns * 2 - turnsCounter - 1)"
         }
         
     }
@@ -79,18 +78,18 @@ class CookingViewController: UIViewController{
             
             if turnsCounter == turns * 2 {
                 timer.invalidate()
-                timerLabel.text = "Done"
+                timerLabel.text = K.doneText
                 cookButton.isHidden = false
                 
-                if cookButton.titleLabel?.text == ("Cook high temp!") && lowTempTime != "0" {
-                    cookButton.setTitle("Cook low temp!", for: .normal)
-                    cookButton.titleLabel?.text = "Cook low temp!"
+                if cookButton.titleLabel?.text == (K.cookHighTemp) && lowTempTime != 0.description {
+                    cookButton.setTitle(K.cookLowTemp, for: .normal)
+                    cookButton.titleLabel?.text = K.cookLowTemp
                     turnsCounter = 0
                     updateTurnsLabel(turns: Int(lowTempTurns!)!)
-                } else if cookButton.titleLabel?.text == ("Cook low temp!") {
-                    cookButton.setTitle("Finish cooking", for: .normal)
+                } else if cookButton.titleLabel?.text == (K.cookLowTemp) {
+                    cookButton.setTitle(K.finishCooking, for: .normal)
                 } else {
-                    cookButton.setTitle("Finish cooking", for: .normal)
+                    cookButton.setTitle(K.finishCooking, for: .normal)
                 }
                 
                 turnsCounter = 0
@@ -115,7 +114,7 @@ class CookingViewController: UIViewController{
 
     @IBAction func cookButtonPressed(_ sender: UIButton) {
 
-        if sender.titleLabel?.text == "Cook high temp!" {
+        if sender.titleLabel?.text == K.cookHighTemp {
             
             timerProgressView.progress = 0
             turnsLeftLabel.isHidden = false
@@ -125,7 +124,7 @@ class CookingViewController: UIViewController{
             timerLabel.text = highTempTime!
             timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimerProgressHighTemp), userInfo: nil, repeats: true)
             
-        } else if sender.titleLabel?.text == "Cook low temp!" {
+        } else if sender.titleLabel?.text == K.cookLowTemp {
             
             timerProgressView.progress = 0
             turnsLeftLabel.isHidden = false
@@ -141,7 +140,7 @@ class CookingViewController: UIViewController{
             var noteTextField = UITextField()
             
             //New alert with title
-            let alert = UIAlertController(title: "Do you want to add this meat to the history?", message: "", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Do you want to add this meat to the history?", message: nil, preferredStyle: .alert)
             
             //New alert for adding to the history
             let historyAlert = UIAlertController(title: "Add meat to the history", message: "", preferredStyle: .alert)
@@ -168,14 +167,14 @@ class CookingViewController: UIViewController{
                 let newHistoryItem = History()
                 let contentArray = [self.highTempTime,self.highTempTurns,self.lowTempTime,self.lowTempTurns]
                 
-                if nameTextField.text != "" {
+                if nameTextField.text?.isEmpty == false /*!= ""*/ {
                     newHistoryItem.name = nameTextField.text!
                     newHistoryItem.dateCreated = Date()
                     do {
                         try self.realm.write(){
                             self.realm.add(newHistoryItem)
                             
-                            if noteTextField.text != "" {
+                            if noteTextField.text?.isEmpty == false /*!= ""*/ {
                                 let newPropertyItem = HistoryItem()
                                 newPropertyItem.title = " " + noteTextField.text! + " "
                                 newPropertyItem.dateCreated = Date()

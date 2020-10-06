@@ -9,6 +9,15 @@
 import Foundation
 
 struct K {
+    static let doneText = "Done"
+    
+    static let cookHighTemp = "Cook high temp!"
+    static let cookLowTemp = "Cook low temp!"
+    static let turnsLeftAtHighTemp = "Turns left at high temp:"
+    static let turnsLeftAtLowTemp = "Turns left at high temp:"
+    static let finishCooking = "Finish cooking"
+    
+    static let normalCell = "Cell"
     static let cellIdentifier = "ReusableCell"
     static let cellNibName = "PropertyCell"
     

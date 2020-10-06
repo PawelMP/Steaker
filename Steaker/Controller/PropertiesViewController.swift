@@ -57,6 +57,7 @@ class PropertiesViewController: UITableViewController {
        return footerView
     }
     
+    // MARK: - Button methods
     @IBAction func nextButtonPressed(_ sender: UIButton) {
         sender.alpha = 1
         let highTempTime = Int(propertiesBrain.properties[0].time) ?? 0
@@ -66,6 +67,15 @@ class PropertiesViewController: UITableViewController {
         performSegue(withIdentifier: K.segues.cookingSegue, sender: self)
         } else {
             
+            //New alert with title
+            let alert = UIAlertController(title: "High temperature settings must be greater than zero", message: nil, preferredStyle: .alert)
+                
+            //Press ok button on the alert window
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { (UIAlertAction) in
+            }))
+            
+            //Present alert
+            present(alert, animated: true)
         }
     }
     
@@ -77,7 +87,7 @@ class PropertiesViewController: UITableViewController {
         sender.alpha = 1
     }
     
-    
+    // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == K.segues.cookingSegue {
@@ -91,19 +101,19 @@ class PropertiesViewController: UITableViewController {
     
 }
 
-//MARK: - TextField Delegate Methods
+// MARK: - TextField Delegate Methods
 
 extension PropertiesViewController: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.text = ""
-        textField.placeholder = "0"
+        textField.placeholder = 0.description
         textField.addDoneButtonOnKeyboard()
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField.text == "" {
-            textField.text = "0"
+        if textField.text!.isEmpty {
+            textField.text = 0.description
         }
         
         let row = textField.tag
@@ -117,6 +127,8 @@ extension PropertiesViewController: UITextFieldDelegate {
     }
 }
 
+
+//MARK: - TextField extension (add button)
 extension UITextField{
     @IBInspectable var doneAccessory: Bool{
         get{
@@ -135,7 +147,7 @@ extension UITextField{
         doneToolbar.barStyle = .default
         
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let done: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.doneButtonAction))
+        let done: UIBarButtonItem = UIBarButtonItem(title: K.doneText, style: .done, target: self, action: #selector(self.doneButtonAction))
         
         let items = [flexSpace, done]
         doneToolbar.items = items
