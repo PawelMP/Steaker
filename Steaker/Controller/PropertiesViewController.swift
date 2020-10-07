@@ -138,6 +138,7 @@ extension PropertiesViewController: UITextFieldDelegate {
         textField.text = ""
         textField.placeholder = 0.description
         textField.addDoneButtonOnKeyboard()
+        //TEST
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
