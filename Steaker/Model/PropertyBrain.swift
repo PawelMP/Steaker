@@ -8,11 +8,12 @@
 
 import Foundation
 
+// To bym nazwał PropertyFactory
 struct PropertyBrain {
     var properties = [
-                Property(title: " High temperature frying time per side [s] "),
-                Property(title: " Amount of frying on the same side at high temp "),
-                Property(title: " Low temperature frying time per side [s] "),
-                Property(title: " Amount of frying on the same side at low temp ")
+        Property(title: " High temperature frying time per side [s] "),
+        Property(title: " Amount of frying on the same side at high temp "),
+        Property(title: " Low temperature frying time per side [s] "),
+        Property(title: " Amount of frying on the same side at low temp ")
     ]
 }

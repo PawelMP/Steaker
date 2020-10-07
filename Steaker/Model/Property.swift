@@ -8,6 +8,7 @@
 
 import Foundation
 
+// time zmienić na Int albo Double, zależy czy tylko mają być całkowite !!!
 struct Property {
     let title: String
     var time: String = "0"

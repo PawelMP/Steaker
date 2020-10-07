@@ -1,0 +1,11 @@
+/* 
+  Uwagi.strings
+  Steaker
+
+  Created by mwagner on 07/10/2020.
+  Copyright © 2020 Paweł Pietrzyk. All rights reserved.
+*/
+
+/*
+1. Ogólnie dobrym nawykiem jest tworzenie mniejszych metod, które wykonują pojedyncze zadanie, ponieważ łatwiej potem albo takie zadanie o ile jest powtarzalne przypisac jako metodę, niż potem kod taki sam pare razy. Też kod jest czytelniejszy o wiele bardziej
+*/

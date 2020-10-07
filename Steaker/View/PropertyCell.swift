@@ -20,7 +20,7 @@ class PropertyCell: UITableViewCell {
         label.layer.cornerRadius = label.frame.size.height / 5
         
         label.adjustsFontSizeToFitWidth = true
-        timeTextField.adjustsFontSizeToFitWidth = true 
+        timeTextField.adjustsFontSizeToFitWidth = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

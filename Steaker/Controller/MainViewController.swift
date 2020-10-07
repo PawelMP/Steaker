@@ -10,15 +10,16 @@ import UIKit
 
 class MainViewController: UIViewController {
 
-    @IBOutlet weak var previousCookingButton: UIButton!
-    @IBOutlet weak var startCookingButton: UIButton!
+    @IBOutlet weak var previousCookingButton: UIButton?
+    @IBOutlet weak var startCookingButton: UIButton?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        previousCookingButton.titleLabel?.adjustsFontSizeToFitWidth = true
-        startCookingButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        // Jak masz Storyboard to możesz to w storyboardzie dodać, tak jak Ci pokazałem na fb
+        previousCookingButton?.titleLabel?.adjustsFontSizeToFitWidth = true
+        startCookingButton?.titleLabel?.adjustsFontSizeToFitWidth = true
     }
     
 
