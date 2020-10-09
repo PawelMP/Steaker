@@ -20,10 +20,10 @@ class CookingViewController: UIViewController{
     
     var player: AVAudioPlayer!
     
-    var highTempTime: String?
-    var highTempTurns: String?
-    var lowTempTime: String?
-    var lowTempTurns: String?
+    var highTempTime: Int?
+    var highTempTurns: Int?
+    var lowTempTime: Int?
+    var lowTempTurns: Int?
 
     var propertiesBrain = PropertyBrain()
     
@@ -45,27 +45,28 @@ class CookingViewController: UIViewController{
         timerLabel.adjustsFontForContentSizeCategory = true
         turnsLeftLabel.adjustsFontForContentSizeCategory = true
         
-        updateTurnsLabel(turns: Int(highTempTurns!)!)
+        updateTurnsLabel(turns: highTempTurns!)
         
-        timerLabel.text = highTempTime!
+        timerLabel.text = String(highTempTime!)
         timerProgressView.progress = 0
         
-        highTempTimeInt = Int(highTempTime!)!
-        lowTempTimeInt = Int(lowTempTime!)!
+        highTempTimeInt = Int(highTempTime!)
+        lowTempTimeInt = Int(lowTempTime!)
     }
     
     func updateTurnsLabel (turns: Int) {
         if cookButton.titleLabel?.text == (K.cookHighTemp) {
             turnsLeftLabel.text = "\(K.turnsLeftAtHighTemp) \(turns * 2 - turnsCounter - 1)"
         } else if cookButton.titleLabel?.text == (K.cookLowTemp){
-            turnsLeftLabel.text = "\(K.turnsLeftAtHighTemp) \(turns * 2 - turnsCounter - 1)"
+            turnsLeftLabel.text = "\(K.turnsLeftAtLowTemp) \(turns * 2 - turnsCounter - 1)"
         }
-        
     }
      
     func updateCooking (tempTime: Int, turns: Int, countTime: inout Int) -> Int {
         let accuracy = 1.0/Float(tempTime)
         updateTurnsLabel(turns: turns)
+        print(accuracy)
+        print(tempTime)
         
         if countTime  > 0 {
             timerLabel.text = String(countTime - 1)
@@ -75,17 +76,16 @@ class CookingViewController: UIViewController{
         else if countTime  == 0 {
             playSound()
             turnsCounter += 1
-            
             if turnsCounter == turns * 2 {
                 timer.invalidate()
                 timerLabel.text = K.doneText
                 cookButton.isHidden = false
                 
-                if cookButton.titleLabel?.text == (K.cookHighTemp) && lowTempTime != 0.description {
+                if cookButton.titleLabel?.text == (K.cookHighTemp) && lowTempTime != 0 && lowTempTurns != 0 {
                     cookButton.setTitle(K.cookLowTemp, for: .normal)
                     cookButton.titleLabel?.text = K.cookLowTemp
                     turnsCounter = 0
-                    updateTurnsLabel(turns: Int(lowTempTurns!)!)
+                    updateTurnsLabel(turns: lowTempTurns!)
                 } else if cookButton.titleLabel?.text == (K.cookLowTemp) {
                     cookButton.setTitle(K.finishCooking, for: .normal)
                 } else {
@@ -97,19 +97,18 @@ class CookingViewController: UIViewController{
                 timerLabel.text = String(tempTime)
                 timerProgressView.progress = 0
                 updateTurnsLabel(turns: turns)
-                countTime  = tempTime
-                
+                countTime = tempTime
             }
         }
         return countTime
     }
     
     @objc func updateTimerProgressHighTemp() {
-        updateCooking(tempTime: Int(highTempTime!)!, turns: Int(highTempTurns!)!, countTime: &highTempTimeInt)
+        updateCooking(tempTime: highTempTime!, turns: highTempTurns!, countTime: &highTempTimeInt)
     }
     
     @objc func updateTimerProgressLowTemp() {
-        updateCooking(tempTime: Int(lowTempTime!)!, turns: Int(lowTempTurns!)!, countTime: &lowTempTimeInt)
+        updateCooking(tempTime: lowTempTime!, turns: lowTempTurns!, countTime: &lowTempTimeInt)
     }
 
     @IBAction func cookButtonPressed(_ sender: UIButton) {
@@ -121,7 +120,7 @@ class CookingViewController: UIViewController{
             sender.isHidden = true
             //turnsLeftLabel.text = "Turns left at high temp: \(Int(highTempTurns!)! * 2 - turnsCounter - 1)"
             
-            timerLabel.text = highTempTime!
+            timerLabel.text = String(highTempTime!)
             timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimerProgressHighTemp), userInfo: nil, repeats: true)
             
         } else if sender.titleLabel?.text == K.cookLowTemp {
@@ -132,7 +131,7 @@ class CookingViewController: UIViewController{
             //updateTurnsLabel(turns: Int(lowTempTurns!)!)
             //turnsLeftLabel.text = "Turns left at low temp: \(Int(lowTempTurns!)! * 2 - turnsCounter - 1)"
             
-            timerLabel.text = lowTempTime!
+            timerLabel.text = String(lowTempTime!)
             timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimerProgressLowTemp), userInfo: nil, repeats: true)
         } else {
             //Text field for history alert placeholders 
@@ -165,6 +164,7 @@ class CookingViewController: UIViewController{
             historyAlert.addAction(UIAlertAction(title: "Add", style: .default, handler: { (UIAlertAction) in
                 
                 let newHistoryItem = History()
+                //let contentArray = [self.lowTempTurns,self.lowTempTime,self.highTempTurns,self.highTempTime]
                 let contentArray = [self.highTempTime,self.highTempTurns,self.lowTempTime,self.lowTempTurns]
                 
                 if nameTextField.text?.isEmpty == false /*!= ""*/ {
@@ -174,16 +174,16 @@ class CookingViewController: UIViewController{
                         try self.realm.write(){
                             self.realm.add(newHistoryItem)
                             
-                            if noteTextField.text?.isEmpty == false /*!= ""*/ {
+                            for index in 0...3 {
                                 let newPropertyItem = HistoryItem()
-                                newPropertyItem.title = " " + noteTextField.text! + " "
+                                newPropertyItem.title = self.propertiesBrain.properties[index].title + " \(contentArray[index]!)"
                                 newPropertyItem.dateCreated = Date()
                                 newHistoryItem.items.append(newPropertyItem)
                             }
                             
-                            for index in 0...3 {
+                            if noteTextField.text?.isEmpty == false /*!= ""*/ {
                                 let newPropertyItem = HistoryItem()
-                                newPropertyItem.title = self.propertiesBrain.properties[index].title + " \(contentArray[index]!)"
+                                newPropertyItem.title = " " + noteTextField.text! + " "
                                 newPropertyItem.dateCreated = Date()
                                 newHistoryItem.items.append(newPropertyItem)
                             }

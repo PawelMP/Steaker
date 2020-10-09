@@ -17,9 +17,6 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Jak masz Storyboard to możesz to w storyboardzie dodać, tak jak Ci pokazałem na fb
-        previousCookingButton?.titleLabel?.adjustsFontSizeToFitWidth = true
-        startCookingButton?.titleLabel?.adjustsFontSizeToFitWidth = true
     }
     
 

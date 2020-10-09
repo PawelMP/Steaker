@@ -12,40 +12,36 @@ class PropertiesViewController: UITableViewController {
 
     
     @IBOutlet weak var nextButton: UIButton!
-    // private przed var o ile nie jest uzywana ta zmienna w innym Controllerze
-    /* private */ var propertiesBrain = PropertyBrain()
+    
+    private var propertiesBrain = PropertyBrain()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do storyboarda można wrzucić
-        nextButton.layer.masksToBounds = true
-        // To można wrzucić do metody viewDidLayoutSubviews
-        nextButton.layer.cornerRadius = nextButton.frame.size.height / 5
+        //nextButton.layer.masksToBounds = true
         
         // UITableViewController ma metodę do ustawiania wysokości komórki - patrz linijka 42
-        tableView.rowHeight = 60
+        //tableView.rowHeight = 60
         
         // Wyszczególniłbym osobną metodę typu `func setupTableView()`
         // K.cellIdentifier, też bym zmienił na to co pisałem w linijce 56
-        tableView.register(UINib(nibName: K.cellNibName, bundle: nil), forCellReuseIdentifier: K.cellIdentifier)
+        tableView.register(UINib(nibName: K.cellNibName, bundle: nil), forCellReuseIdentifier: K.propertyCellIdentifier)
         
     }
-
-    /*
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         nextButton.layer.cornerRadius = nextButton.frame.size.height / 5
     }
-    */
     
     // MARK: - Table view data source
 
     // Najlepiej i tak byłoby zrobić, że w klasie PropertyCell.xib ustawić constrainty tak aby wysokośc komórki się sama wyliczała i usunąć tą metodę oraz linijkę 27. Domyślnie zwracane jest tutaj 'UITableView.automaticDimension' czyli apka sama wylicza jaka ma być wysokośc komórki. Jeżeli Ci zależy, żeby było dokładnie 60 no to wtedy możesz ustawić wysokośc labeli i constraintów w .xib tak aby sumarycznie dawały to 60.
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
-    }
+//    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return 60
+//    }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return propertiesBrain.properties.count
@@ -62,12 +58,17 @@ class PropertiesViewController: UITableViewController {
         }
         */
 
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.cellIdentifier, for: indexPath) as! PropertyCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: K.propertyCellIdentifier, for: indexPath) as? PropertyCell else {
+            return UITableViewCell()
+        }
         
         //Wyszcególnić można do osobnej funckji typu `cell.setupCell(with: PropertyBrain)` - czyli ta metoda w klasie PropertyCell dla kolejnych dwóch linijek, a nawet trzech, bo do PropertyBrain możesz dodać parametr tag i od razu masz większy model
-        cell.label.text = propertiesBrain.properties[indexPath.row].title
+        
+        cell.setupCell(with: propertiesBrain, for: indexPath)
+        
+        //cell.label.text = propertiesBrain.properties[indexPath.row].title
 //        cell.timeTextField.text = propertiesBrain.properties[indexPath.row].time
-        cell.timeTextField.tag = indexPath.row
+        //cell.timeTextField.tag = indexPath.row
         
         cell.timeTextField.delegate = self
 
@@ -82,15 +83,15 @@ class PropertiesViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView = UIView()
         // Ta linijka niepotrzebna bo domyślnie tak jest UIView() ustawione
-        footerView.backgroundColor = UIColor.clear
+        //footerView.backgroundColor = UIColor.clear
         return footerView
     }
     
     // MARK: - Button methods
     @IBAction func nextButtonPressed(_ sender: UIButton) {
         sender.alpha = 1
-        let highTempTime = Int(propertiesBrain.properties[0].time) ?? 0
-        let highTempTurns = Int(propertiesBrain.properties[1].time) ?? 0
+        let highTempTime = propertiesBrain.properties[0].time
+        let highTempTurns = propertiesBrain.properties[1].time
         
         if highTempTime > 0 && highTempTurns > 0 {
         performSegue(withIdentifier: K.segues.cookingSegue, sender: self)
@@ -142,19 +143,22 @@ extension PropertiesViewController: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         // kategorycznie nie moze być force - '!' - zamienić na guard let
-        /*
-         guard let text = textField.text, text.isEmpty else { return }
-         */
-        // Ten if jest niepotrzebny, bo jak jest walidacja w kodzie wyżej, czy text jest Empty to dla properties time i tak ma wartość defaultową 0 przypisaną
-        if textField.text!.isEmpty {
+        
+        guard let text = textField.text, !text.isEmpty else {
             textField.text = 0.description
+            return
         }
+        // Ten if jest niepotrzebny, bo jak jest walidacja w kodzie wyżej, czy text jest Empty to dla properties time i tak ma wartość defaultową 0 przypisaną
+//        if textField.text!.isEmpty {
+//            textField.text = 0.description
+//        }
         
         // nie ma potrzeby robić zmiennej row, wrzuć ją od razu do properties[]
         // Jeżeli uzyjesz tego guard let co napisałem wyżej to od razu na luzie możesz przypisać do time jako Int ten `text`
+        propertiesBrain.properties[textField.tag].time = Int(text) ?? 0
+        /*
         let row = textField.tag
-        //        propertiesBrain.properties[textField.tag].time = Int(text) ?? 0
-        propertiesBrain.properties[row].time = textField.text!
+        propertiesBrain.properties[row].time = textField.text!*/
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
