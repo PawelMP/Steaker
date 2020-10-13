@@ -12,7 +12,7 @@ import RealmSwift
 class DetailsViewController: SwipeTableViewController {
     
     let realm = try! Realm()
-    var steakItems: Results<HistoryItem>?
+    private var steakItems: Results<HistoryItem>?
     
     var selectedSteak: History? {
         didSet {
@@ -27,8 +27,6 @@ class DetailsViewController: SwipeTableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
-        addPropertyButton.titleLabel?.adjustsFontSizeToFitWidth = true
         
         let backgroundImage = UIImage(named: "Background.png")
         let imageView = UIImageView(image: backgroundImage)
@@ -57,13 +55,11 @@ class DetailsViewController: SwipeTableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        //let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         cell.textLabel?.adjustsFontSizeToFitWidth = true
         cell.textLabel?.text = steakItems?[indexPath.row].title ?? "No added properties yet"
         cell.textLabel?.textColor = UIColor.white
-        //cell.textLabel?.font = UIFont(name: "Copperplate", size: 20)
         
         return cell
     }
@@ -102,7 +98,6 @@ class DetailsViewController: SwipeTableViewController {
             } catch {
                 print("Error deleting category context \(error)")
             }
-            //tableView.reloadData()
         }
     }
     
