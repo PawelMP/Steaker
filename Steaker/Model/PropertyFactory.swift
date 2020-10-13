@@ -8,8 +8,7 @@
 
 import Foundation
 
-// To bym nazwał PropertyFactory
-struct PropertyBrain {
+struct PropertyFactory {
     var properties = [
         Property(title: " High temperature frying time per side [s] "),
         Property(title: " Amount of frying on the same side at high temp "),

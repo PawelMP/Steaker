@@ -13,7 +13,7 @@ class HistoryViewController: SwipeTableViewController {
     
     let realm = try! Realm()
     
-    var historyArray: Results<History>?
+    private var historyArray: Results<History>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,10 +26,8 @@ class HistoryViewController: SwipeTableViewController {
         return historyArray?.count ?? 1
     }
 
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        //let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         cell.textLabel?.text = historyArray?[indexPath.row].name ?? "No previous steaks cooked yet"
 
@@ -116,7 +114,6 @@ class HistoryViewController: SwipeTableViewController {
             } catch {
                 print("Error deleting category context \(error)")
             }
-            //tableView.reloadData()
         }
     }
     

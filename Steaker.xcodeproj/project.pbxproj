@@ -22,7 +22,7 @@
 		D700A54225178B03002F3D54 /* PropertyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D700A54025178B03002F3D54 /* PropertyCell.xib */; };
 		D700A54425178D41002F3D54 /* PropertiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D700A54325178D41002F3D54 /* PropertiesViewController.swift */; };
 		D700A54625178D76002F3D54 /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = D700A54525178D76002F3D54 /* Property.swift */; };
-		D700A5482517995A002F3D54 /* PropertyBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = D700A5472517995A002F3D54 /* PropertyBrain.swift */; };
+		D700A5482517995A002F3D54 /* PropertyFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D700A5472517995A002F3D54 /* PropertyFactory.swift */; };
 		D700A54C2517C0B5002F3D54 /* CookingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D700A54B2517C0B5002F3D54 /* CookingViewController.swift */; };
 		D73875B8251FC7A4009A575A /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73875B7251FC7A4009A575A /* SwipeTableViewController.swift */; };
 		D7ABA4DA251D27EF004712E5 /* HistoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7ABA4D9251D27EF004712E5 /* HistoryItem.swift */; };
@@ -49,7 +49,7 @@
 		D700A54025178B03002F3D54 /* PropertyCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PropertyCell.xib; sourceTree = "<group>"; };
 		D700A54325178D41002F3D54 /* PropertiesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertiesViewController.swift; sourceTree = "<group>"; };
 		D700A54525178D76002F3D54 /* Property.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
-		D700A5472517995A002F3D54 /* PropertyBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyBrain.swift; sourceTree = "<group>"; };
+		D700A5472517995A002F3D54 /* PropertyFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyFactory.swift; sourceTree = "<group>"; };
 		D700A54B2517C0B5002F3D54 /* CookingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookingViewController.swift; sourceTree = "<group>"; };
 		D73875B7251FC7A4009A575A /* SwipeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTableViewController.swift; sourceTree = "<group>"; };
 		D7ABA4D9251D27EF004712E5 /* HistoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryItem.swift; sourceTree = "<group>"; };
@@ -127,7 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				D700A54525178D76002F3D54 /* Property.swift */,
-				D700A5472517995A002F3D54 /* PropertyBrain.swift */,
+				D700A5472517995A002F3D54 /* PropertyFactory.swift */,
 				D7C5E65525189F2C00A9F2D4 /* History.swift */,
 				D7ABA4D9251D27EF004712E5 /* HistoryItem.swift */,
 			);
@@ -287,7 +287,7 @@
 				D700A54C2517C0B5002F3D54 /* CookingViewController.swift in Sources */,
 				D700A51D25175353002F3D54 /* MainViewController.swift in Sources */,
 				D700A54125178B03002F3D54 /* PropertyCell.swift in Sources */,
-				D700A5482517995A002F3D54 /* PropertyBrain.swift in Sources */,
+				D700A5482517995A002F3D54 /* PropertyFactory.swift in Sources */,
 				D700A51925175353002F3D54 /* AppDelegate.swift in Sources */,
 				D7C5E65625189F2C00A9F2D4 /* History.swift in Sources */,
 				D700A51B25175353002F3D54 /* SceneDelegate.swift in Sources */,

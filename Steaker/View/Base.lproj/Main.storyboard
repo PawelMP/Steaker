@@ -140,6 +140,9 @@
                             <state key="normal" title="Add new property " image="plus" catalog="system">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="titleLabel.adjustsFontSizeToFitWidth" value="YES"/>
+                            </userDefinedRuntimeAttributes>
                             <connections>
                                 <action selector="addButtonPressed:" destination="Dka-dy-P8x" eventType="touchUpInside" id="BAS-lp-B9z"/>
                                 <action selector="addNewButtonExit:" destination="Dka-dy-P8x" eventType="touchDragExit" id="Bf7-Qu-dHr"/>
@@ -227,12 +230,18 @@
                                                 <fontDescription key="fontDescription" name="Charter-Bold" family="Charter" pointSize="100"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustsFontForContentSizeCategory" value="YES"/>
+                                                </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Turns left at high temp" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iiB-DO-dj7">
                                                 <rect key="frame" x="30.666666666666671" y="220" width="211.66666666666663" height="24.666666666666657"/>
                                                 <fontDescription key="fontDescription" name="Charter-Bold" family="Charter" pointSize="20"/>
                                                 <color key="textColor" systemColor="systemGray6Color" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustsFontForContentSizeCategory" value="YES"/>
+                                                </userDefinedRuntimeAttributes>
                                             </label>
                                         </subviews>
                                     </stackView>

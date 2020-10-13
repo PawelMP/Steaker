@@ -18,8 +18,6 @@ struct K {
     static let finishCooking = "Finish cooking"
     
     static let normalCell = "Cell"
-    static let propertyCellIdentifier = "ReusableCell"
-    static let cellNibName = "PropertyCell"
     
     struct segues {
         static let historySegue = "toHistory"

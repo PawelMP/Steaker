@@ -10,6 +10,14 @@ import UIKit
 
 class PropertyCell: UITableViewCell {
     
+    class var cellIdentifier: String {
+         return "ReusableCell"
+    }
+    
+    class var cellNibName: String {
+        return "PropertyCell"
+    }
+    
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var timeTextField: UITextField!
     
@@ -27,9 +35,9 @@ class PropertyCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    func setupCell(with property: PropertyBrain, for indexPath: IndexPath) {
+    func setupCell(with property: PropertyFactory, for indexPath: IndexPath) {
         label.text = property.properties[indexPath.row].title
-        //        cell.timeTextField.text = propertiesBrain.properties[indexPath.row].time
+        //cell.timeTextField.text = propertiesBrain.properties[indexPath.row].time
         timeTextField.tag = indexPath.row
     }
     
