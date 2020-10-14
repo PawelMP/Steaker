@@ -67,10 +67,10 @@ class PropertiesViewController: UITableViewController {
         } else {
             
             //New alert with title
-            let alert = UIAlertController(title: "High temperature settings must be greater than zero", message: nil, preferredStyle: .alert)
+            let alert = UIAlertController(title: K.settingsGreaterThanZero, message: nil, preferredStyle: .alert)
                 
             //Press ok button on the alert window
-            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { (UIAlertAction) in
+            alert.addAction(UIAlertAction(title: K.ok, style: .cancel, handler: { (UIAlertAction) in
             }))
             
             //Present alert
@@ -105,7 +105,6 @@ extension PropertiesViewController: UITextFieldDelegate {
         textField.text = ""
         textField.placeholder = 0.description
         textField.addDoneButtonOnKeyboard()
-        //TEST
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
