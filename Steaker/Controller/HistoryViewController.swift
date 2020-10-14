@@ -15,6 +15,9 @@ class HistoryViewController: SwipeTableViewController {
     
     private var historyArray: Results<History>?
     
+    //FIXME: - zastanów się czy nie wrzucić metody ze środka do innej metody ktora się odpala na samym początku
+    //https://medium.com/@NeedoneApp/are-you-familar-with-viewwillappear-viewdidappear-viewdidload-viewwilldisappear-and-b52ad3b3eb6
+    // Jak nie będziesz pewien do czego to napisz do mnie
     override func viewDidLoad() {
         super.viewDidLoad()
         historyArray = RealmManager.shared.loadHistory()

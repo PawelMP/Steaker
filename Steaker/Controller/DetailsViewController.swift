@@ -24,15 +24,15 @@ class DetailsViewController: SwipeTableViewController {
     
     @IBOutlet weak var addPropertyButton: UIButton!
     
+    override func viewWillAppear(_ animated: Bool) {
+        setupTableView()
+    }
+    
     private func setupTableView() {
         let backgroundImage = UIImage(named: "Background")
         let imageView = UIImageView(image: backgroundImage)
         imageView.contentMode = .scaleAspectFill
         tableView.backgroundView = UIImageView(image: backgroundImage)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        setupTableView()
     }
     
     // MARK: - SwipeTable update method
@@ -52,7 +52,7 @@ class DetailsViewController: SwipeTableViewController {
     }
 }
 
-    // MARK: - Table view data source
+// MARK: - Table view data source
 extension DetailsViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

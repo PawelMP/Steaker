@@ -10,17 +10,13 @@ import UIKit
 
 class PropertiesViewController: UITableViewController {
 
-    
     @IBOutlet weak var nextButton: UIButton!
     
     private var propertiesBrain = PropertyFactory()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        tableView.register(UINib(nibName: PropertyCell.cellNibName, bundle: nil), forCellReuseIdentifier: PropertyCell.cellIdentifier)
-        
+        setupTableView()
     }
     
     override func viewDidLayoutSubviews() {
@@ -28,12 +24,15 @@ class PropertiesViewController: UITableViewController {
         nextButton.layer.cornerRadius = nextButton.frame.size.height / 5
     }
     
-    // MARK: - Table view data source
+    private func setupTableView() {
+        tableView.register(UINib(nibName: PropertyCell.cellNibName, bundle: nil), forCellReuseIdentifier: PropertyCell.cellIdentifier)
+    }
 
+    //FIXME: - Wrzuć do extension tej klasy
+    // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return propertiesBrain.properties.count
     }
-
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
@@ -98,7 +97,6 @@ class PropertiesViewController: UITableViewController {
 }
 
 // MARK: - TextField Delegate Methods
-
 extension PropertiesViewController: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -122,10 +120,11 @@ extension PropertiesViewController: UITextFieldDelegate {
     }
 }
 
-
+//FIXME: - Przerzuć extension do folderu CoreExtension
 //MARK: - TextField extension (add button)
-extension UITextField{
-    @IBInspectable var doneAccessory: Bool{
+extension UITextField {
+    @IBInspectable
+    var doneAccessory: Bool {
         get{
             return self.doneAccessory
         }
@@ -136,8 +135,7 @@ extension UITextField{
         }
     }
     
-    func addDoneButtonOnKeyboard()
-    {
+    func addDoneButtonOnKeyboard() {
         let doneToolbar: UIToolbar = UIToolbar(frame: CGRect.init(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
         doneToolbar.barStyle = .default
         
@@ -151,8 +149,8 @@ extension UITextField{
         self.inputAccessoryView = doneToolbar
     }
     
-    @objc func doneButtonAction()
-    {
+    @objc
+    func doneButtonAction() {
         self.resignFirstResponder()
     }
 }

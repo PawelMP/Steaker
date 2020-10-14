@@ -32,11 +32,15 @@ class CookingViewController: UIViewController{
     
     let realm = try! Realm()
     
+    //FIXME: - czemu nie private ? + nazwe zmień na CookingStage czy coś tego typu
+    //FIXME: - zapisałbym to tak
+    //var cookButtonEnum: CookButtonType = .highTemperature
     var cookButtonEnum = CookButtonType.highTemperature
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //FIXME: - Wrzuć to do osobnej metody o nazwie setupController()
         cookButton.titleLabel?.textAlignment = .center
         
         updateTurnsLabel(turns: propertiesBrain.properties[1].number)
@@ -56,7 +60,8 @@ class CookingViewController: UIViewController{
         }
     }
     
-    @discardableResult func updateCooking (tempTime: Int, turns: Int, countTime: inout Int) -> Int {
+    @discardableResult
+    func updateCooking (tempTime: Int, turns: Int, countTime: inout Int) -> Int {
         let accuracy = 1.0/Float(tempTime)
         updateTurnsLabel(turns: turns)
         
@@ -73,7 +78,7 @@ class CookingViewController: UIViewController{
                 timer.invalidate()
                 timerLabel.text = K.doneText
                 cookButton.isHidden = false
-                
+                //FIXME: - zmienić na enum
                 if cookButton.titleLabel?.text == K.cookHighTemp && propertiesBrain.properties[2].number != 0 && propertiesBrain.properties[3].number != 0 {
                     cookButton.titleLabel?.text = K.cookLowTemp
                     cookButton.setTitle(K.cookLowTemp, for: .normal)
@@ -90,6 +95,7 @@ class CookingViewController: UIViewController{
                 
                 turnsCounter = 0
             } else {
+                //FIXME: - usuń nawiasy
                 timerLabel.text = (tempTime).description
                 timerProgressView.progress = 0
                 updateTurnsLabel(turns: turns)
@@ -99,32 +105,36 @@ class CookingViewController: UIViewController{
         return countTime
     }
     
-    @objc func updateTimerProgressHighTemp() {
+    @objc
+    func updateTimerProgressHighTemp() {
         updateCooking(tempTime: propertiesBrain.properties[0].number, turns: propertiesBrain.properties[1].number, countTime: &highTempTimeInt)
     }
     
-    @objc func updateTimerProgressLowTemp() {
+    @objc
+    func updateTimerProgressLowTemp() {
         updateCooking(tempTime: propertiesBrain.properties[2].number, turns: propertiesBrain.properties[3].number, countTime: &lowTempTimeInt)
+    }
+    
+    func setupCook(_ sender: UIButton, title: String, selector: Selector) {
+        timerProgressView.progress = 0
+        turnsLeftLabel.isHidden = false
+        sender.isHidden = true
+        
+        timerLabel.text = title
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: selector, userInfo: nil, repeats: true)
     }
     
     @IBAction func cookButtonPressed(_ sender: UIButton) {
         
         switch cookButtonEnum {
         case .highTemperature:
-            timerProgressView.progress = 0
-            turnsLeftLabel.isHidden = false
-            sender.isHidden = true
-            
-            timerLabel.text = propertiesBrain.properties[0].number.description
-            timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimerProgressHighTemp), userInfo: nil, repeats: true)
+            setupCook(sender,
+                      title: propertiesBrain.properties[0].number.description,
+                      selector: #selector(updateTimerProgressHighTemp))
         case .lowTemperature:
-            timerProgressView.progress = 0
-            turnsLeftLabel.isHidden = false
-            sender.isHidden = true
-            
-            timerLabel.text = propertiesBrain.properties[2].number.description
-            timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimerProgressLowTemp), userInfo: nil, repeats: true)
-            
+            setupCook(sender,
+                      title: propertiesBrain.properties[2].number.description,
+                      selector: #selector(updateTimerProgressLowTemp))
         case .finish:
             //New alert with title
             let alert = UIAlertController(title: K.questionAddMeatToHistory, message: nil, preferredStyle: .alert)
@@ -174,12 +184,15 @@ class CookingViewController: UIViewController{
         
     }
     
+    //FIXME: - private
     func playSound() {
+        //FIXME: - guard let na URL musi być to na pewno i try! bym zamienił na do catch, bo nie wiadomo, czy się cos nie zjebie i nie wydupcy tego Playera i aplikacji razem z nim
         let url = Bundle.main.url(forResource: "bell", withExtension: "wav")
         player = try! AVAudioPlayer(contentsOf: url!)
         player.play()
     }
     
+    //FIXME: - ta metoda jest w ogóle nie używana
     func createHistoryItem(index: Int, propertiesBrain: PropertyFactory) -> HistoryItem {
         let newHistoryItem = HistoryItem()
         newHistoryItem.title = self.propertiesBrain.properties[index].title + self.propertiesBrain.properties[index].number.description
