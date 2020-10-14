@@ -13,6 +13,7 @@ import AVFoundation
 
 class CookingViewController: UIViewController{
     
+    //FIXME: - 
     @IBOutlet weak var cookButton: UIButton!
     @IBOutlet weak var timerLabel: UILabel!
     @IBOutlet weak var timerProgressView: UIProgressView!
@@ -34,7 +35,9 @@ class CookingViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //FIXME: - Możesz to ustawić w Storyboardzie w części Control, ostatnia ikonka przy Alignment
         cookButton.contentHorizontalAlignment = .center
+        //FIXME: - też w Storyboardzie możesz ustawić jak zmienisz typ title z Plain na Attributted
         cookButton.titleLabel?.textAlignment = .center
         
         updateTurnsLabel(turns: propertiesBrain.properties[1].number)
@@ -54,6 +57,8 @@ class CookingViewController: UIViewController{
         }
     }
      
+    //FIXME: - Jak dodasz to @discardableResult przed metodą, która coś zwraca, to znikną Ci warningi, że dana metoda zwraca ale nie jest do niczego przypisana, które masz teraz w linijce 102 i 106
+//    @discardableResult
     func updateCooking (tempTime: Int, turns: Int, countTime: inout Int) -> Int {
         let accuracy = 1.0/Float(tempTime)
         updateTurnsLabel(turns: turns)
@@ -102,7 +107,10 @@ class CookingViewController: UIViewController{
     }
 
     @IBAction func cookButtonPressed(_ sender: UIButton) {
-
+        //FIXME: - Dodałbym extension do UIButton w nowym folderze - ścieżka -> Steaker/Resources/CoreExtension typu ButtonType i po enumie dodał opcje: low Temperature, highTemeprature itd itp
+        // ofc jak tak zrobisz to będziesz musiał zmieniać ten typ za każdym razem jak to jest potrzebne, ale będzie o wiele lepiej widoczne niż porównywanie ifa do tekstu
+        //FIXME: -  dodatkowo nie piszemy skrótami w kodzie w ogóle
+        //if sender.cookButtonType == .hightTemperature {
         if sender.titleLabel?.text == K.cookHighTemp {
             
             timerProgressView.progress = 0
@@ -121,6 +129,7 @@ class CookingViewController: UIViewController{
             timerLabel.text = propertiesBrain.properties[2].number.description
             timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimerProgressLowTemp), userInfo: nil, repeats: true)
         } else {
+            //FIXME: - Znowu Alert z textfieldami - Patrz DetailsVC i FIXME
             //Text field for history alert placeholders 
             var nameTextField = UITextField()
             var noteTextField = UITextField()
@@ -155,11 +164,15 @@ class CookingViewController: UIViewController{
                 if nameTextField.text?.isEmpty == false {
                     newHistoryItem.name = nameTextField.text!
                     newHistoryItem.dateCreated = Date()
+                    //FIXME: - Do Realm Managera - opis w DetailsVC
                     do {
                         try self.realm.write(){
                             self.realm.add(newHistoryItem)
                             
+                            //FIXME: - ta pętla może wyglądać w chuj ładniej
+                            //for property in propertiesBrain.properties.reversed() {}
                             for index in (0...3).reversed() {
+                                // Kolejne 3 linijki wydziel do prywatnej metody createPropertyItem(with title: String) -> HistoryItem, wtedy od razu w append dodajesz ta metodę i masz mniej kodu w metodzie, która już jest mega duża, tak samo robisz wtedy w linijce od 183 - 185
                                 let newPropertyItem = HistoryItem()
                                 newPropertyItem.title = self.propertiesBrain.properties[index].title + self.propertiesBrain.properties[index].number.description
                                 newPropertyItem.dateCreated = Date()
