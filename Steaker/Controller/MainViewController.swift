@@ -12,11 +12,6 @@ class MainViewController: UIViewController {
 
     @IBOutlet weak var previousCookingButton: UIButton?
     @IBOutlet weak var startCookingButton: UIButton?
-    
-    //FIXME: - Puste więc do usunięcia
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
 
     @IBAction func startCookingButtonPressed(_ sender: UIButton) {
         sender.alpha = 1

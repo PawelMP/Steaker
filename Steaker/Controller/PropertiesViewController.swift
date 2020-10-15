@@ -27,33 +27,6 @@ class PropertiesViewController: UITableViewController {
     private func setupTableView() {
         tableView.register(UINib(nibName: PropertyCell.cellNibName, bundle: nil), forCellReuseIdentifier: PropertyCell.cellIdentifier)
     }
-
-    //FIXME: - Wrzuć do extension tej klasy
-    // MARK: - Table view data source
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return propertiesBrain.properties.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: PropertyCell.cellIdentifier, for: indexPath) as? PropertyCell else {
-            return UITableViewCell()
-        }
-        
-        cell.setupCell(with: propertiesBrain, for: indexPath)
-        cell.timeTextField.delegate = self
-
-        return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-       return 50
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footerView = UIView()
-        return footerView
-    }
     
     // MARK: - Button methods
     @IBAction func nextButtonPressed(_ sender: UIButton) {
@@ -120,38 +93,30 @@ extension PropertiesViewController: UITextFieldDelegate {
     }
 }
 
-//FIXME: - Przerzuć extension do folderu CoreExtension
-//MARK: - TextField extension (add button)
-extension UITextField {
-    @IBInspectable
-    var doneAccessory: Bool {
-        get{
-            return self.doneAccessory
-        }
-        set (hasDone) {
-            if hasDone{
-                addDoneButtonOnKeyboard()
-            }
-        }
+    // MARK: - Table view data source
+extension PropertiesViewController  {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return propertiesBrain.properties.count
     }
     
-    func addDoneButtonOnKeyboard() {
-        let doneToolbar: UIToolbar = UIToolbar(frame: CGRect.init(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
-        doneToolbar.barStyle = .default
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PropertyCell.cellIdentifier, for: indexPath) as? PropertyCell else {
+            return UITableViewCell()
+        }
         
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let done: UIBarButtonItem = UIBarButtonItem(title: K.doneText, style: .done, target: self, action: #selector(self.doneButtonAction))
-        
-        let items = [flexSpace, done]
-        doneToolbar.items = items
-        doneToolbar.sizeToFit()
-        
-        self.inputAccessoryView = doneToolbar
+        cell.setupCell(with: propertiesBrain, for: indexPath)
+        cell.timeTextField.delegate = self
+
+        return cell
     }
     
-    @objc
-    func doneButtonAction() {
-        self.resignFirstResponder()
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+       return 50
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footerView = UIView()
+        return footerView
     }
 }
-

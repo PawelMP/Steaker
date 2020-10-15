@@ -31,17 +31,12 @@ class CookingViewController: UIViewController{
     private var turnsCounter = 0
     
     let realm = try! Realm()
-    
-    //FIXME: - czemu nie private ? + nazwe zmień na CookingStage czy coś tego typu
-    //FIXME: - zapisałbym to tak
-    //var cookButtonEnum: CookButtonType = .highTemperature
-    var cookButtonEnum = CookButtonType.highTemperature
+    private var cookingStage: CookButtonType = .highTemperature
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //FIXME: - Wrzuć to do osobnej metody o nazwie setupController()
-        cookButton.titleLabel?.textAlignment = .center
+        setupController()
         
         updateTurnsLabel(turns: propertiesBrain.properties[1].number)
         
@@ -50,6 +45,10 @@ class CookingViewController: UIViewController{
         
         highTempTimeInt = propertiesBrain.properties[0].number
         lowTempTimeInt = propertiesBrain.properties[2].number
+    }
+    
+    func setupController() {
+        cookButton.titleLabel?.textAlignment = .center
     }
     
     func updateTurnsLabel(turns: Int) {
@@ -78,25 +77,26 @@ class CookingViewController: UIViewController{
                 timer.invalidate()
                 timerLabel.text = K.doneText
                 cookButton.isHidden = false
-                //FIXME: - zmienić na enum
-                if cookButton.titleLabel?.text == K.cookHighTemp && propertiesBrain.properties[2].number != 0 && propertiesBrain.properties[3].number != 0 {
+                
+                switch cookingStage {
+                case .highTemperature:
+                    if propertiesBrain.properties[2].number != 0 && propertiesBrain.properties[3].number != 0 {
                     cookButton.titleLabel?.text = K.cookLowTemp
                     cookButton.setTitle(K.cookLowTemp, for: .normal)
                     turnsCounter = 0
                     updateTurnsLabel(turns: propertiesBrain.properties[3].number)
-                    cookButtonEnum = .lowTemperature
-                } else if cookButton.titleLabel?.text == K.cookLowTemp {
+                    cookingStage = .lowTemperature
+                    }
+                case .lowTemperature:
                     cookButton.setTitle(K.finishCooking, for: .normal)
-                    cookButtonEnum = .finish
-                } else {
+                    cookingStage = .finish
+                case .finish:
                     cookButton.setTitle(K.finishCooking, for: .normal)
-                    cookButtonEnum = .finish
+                    cookingStage = .finish
                 }
-                
                 turnsCounter = 0
             } else {
-                //FIXME: - usuń nawiasy
-                timerLabel.text = (tempTime).description
+                timerLabel.text = tempTime.description
                 timerProgressView.progress = 0
                 updateTurnsLabel(turns: turns)
                 countTime = tempTime
@@ -126,7 +126,7 @@ class CookingViewController: UIViewController{
     
     @IBAction func cookButtonPressed(_ sender: UIButton) {
         
-        switch cookButtonEnum {
+        switch cookingStage {
         case .highTemperature:
             setupCook(sender,
                       title: propertiesBrain.properties[0].number.description,
@@ -184,19 +184,16 @@ class CookingViewController: UIViewController{
         
     }
     
-    //FIXME: - private
-    func playSound() {
-        //FIXME: - guard let na URL musi być to na pewno i try! bym zamienił na do catch, bo nie wiadomo, czy się cos nie zjebie i nie wydupcy tego Playera i aplikacji razem z nim
-        let url = Bundle.main.url(forResource: "bell", withExtension: "wav")
-        player = try! AVAudioPlayer(contentsOf: url!)
+    private func playSound() {
+        guard let url = Bundle.main.url(forResource: "bell", withExtension: "wav") else {
+            return
+        }
+        do {
+            player = try AVAudioPlayer(contentsOf: url)
+        } catch {
+            print(error)
+            return
+        }
         player.play()
-    }
-    
-    //FIXME: - ta metoda jest w ogóle nie używana
-    func createHistoryItem(index: Int, propertiesBrain: PropertyFactory) -> HistoryItem {
-        let newHistoryItem = HistoryItem()
-        newHistoryItem.title = self.propertiesBrain.properties[index].title + self.propertiesBrain.properties[index].number.description
-        newHistoryItem.dateCreated = Date()
-        return newHistoryItem
     }
 }

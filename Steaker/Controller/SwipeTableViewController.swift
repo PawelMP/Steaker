@@ -11,8 +11,7 @@ import SwipeCellKit
 
 class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegate {
     
-    //FIXME: - private
-    var cellFontSize: CGFloat = 20
+    private var cellFontSize: CGFloat = 20
 
     //MARK: - TableView data source Methods
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

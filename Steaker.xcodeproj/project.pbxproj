@@ -28,6 +28,7 @@
 		D73875B8251FC7A4009A575A /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73875B7251FC7A4009A575A /* SwipeTableViewController.swift */; };
 		D7ABA4DA251D27EF004712E5 /* HistoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7ABA4D9251D27EF004712E5 /* HistoryItem.swift */; };
 		D7C5E65625189F2C00A9F2D4 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7C5E65525189F2C00A9F2D4 /* History.swift */; };
+		D7DD9696253892B200F7C50C /* UITextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7DD9695253892B200F7C50C /* UITextFieldExtension.swift */; };
 		D7E748F125209398008C98EE /* bell.wav in Resources */ = {isa = PBXBuildFile; fileRef = D7E748F025209398008C98EE /* bell.wav */; };
 		D7E99AF42537459200A48292 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E99AF32537459200A48292 /* RealmManager.swift */; };
 		D7E99AF62537488500A48292 /* TextAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E99AF52537488500A48292 /* TextAlert.swift */; };
@@ -59,6 +60,7 @@
 		D73875B7251FC7A4009A575A /* SwipeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTableViewController.swift; sourceTree = "<group>"; };
 		D7ABA4D9251D27EF004712E5 /* HistoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryItem.swift; sourceTree = "<group>"; };
 		D7C5E65525189F2C00A9F2D4 /* History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
+		D7DD9695253892B200F7C50C /* UITextFieldExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldExtension.swift; sourceTree = "<group>"; };
 		D7E748F025209398008C98EE /* bell.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bell.wav; sourceTree = "<group>"; };
 		D7E99AF32537459200A48292 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 		D7E99AF52537488500A48292 /* TextAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAlert.swift; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				513E9A0E25371F9400FB9093 /* UIButtonExtension.swift */,
+				D7DD9695253892B200F7C50C /* UITextFieldExtension.swift */,
 			);
 			path = CoreExtension;
 			sourceTree = "<group>";
@@ -323,6 +326,7 @@
 				D700A53625177FB0002F3D54 /* Constants.swift in Sources */,
 				D7E99AF42537459200A48292 /* RealmManager.swift in Sources */,
 				D7E99AFD25377BF100A48292 /* AlertTextField.swift in Sources */,
+				D7DD9696253892B200F7C50C /* UITextFieldExtension.swift in Sources */,
 				D700A5302517761E002F3D54 /* HistoryViewController.swift in Sources */,
 				D73875B8251FC7A4009A575A /* SwipeTableViewController.swift in Sources */,
 				513E9A0F25371F9400FB9093 /* UIButtonExtension.swift in Sources */,
