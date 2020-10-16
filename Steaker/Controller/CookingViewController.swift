@@ -13,7 +13,6 @@ import AVFoundation
 
 class CookingViewController: UIViewController{
     
-    //FIXME: - 
     @IBOutlet weak var cookButton: UIButton!
     @IBOutlet weak var timerLabel: UILabel!
     @IBOutlet weak var timerProgressView: UIProgressView!

@@ -31,11 +31,14 @@ class PropertiesViewController: UITableViewController {
     // MARK: - Button methods
     @IBAction func nextButtonPressed(_ sender: UIButton) {
         sender.alpha = 1
+        //FIXME: - propozycja z mojej strony
+        //        let highTempTime = propertiesBrain.getNumber(forIndex: 0)
+        //        let highTempTurns = propertiesBrain.getNumber(forIndex: 1)
         let highTempTime = propertiesBrain.properties[0].number
         let highTempTurns = propertiesBrain.properties[1].number
         
         if highTempTime > 0 && highTempTurns > 0 {
-        performSegue(withIdentifier: K.segues.cookingSegue, sender: self)
+            performSegue(withIdentifier: K.segues.cookingSegue, sender: self)
         } else {
             
             //New alert with title
@@ -60,13 +63,12 @@ class PropertiesViewController: UITableViewController {
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
+        //FIXME: - destination daj do if let i po przecinku tego ifa
         if segue.identifier == K.segues.cookingSegue {
             let destinationVC = segue.destination as! CookingViewController
             destinationVC.propertiesBrain = propertiesBrain
         }
     }
-    
 }
 
 // MARK: - TextField Delegate Methods
@@ -79,11 +81,13 @@ extension PropertiesViewController: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        
         guard let text = textField.text, !text.isEmpty else {
             textField.text = 0.description
             return
         }
+        //FIXME: - dodałbym w strukturze metody dwie, dodałem je
+        // w cookingVC tez zaimplementuj te metody wtedy i w każdym innym miejscu gdzie jest to używane
+        //propertiesBrain.setNumber(with: Int(text), forIndex: textField.tag)
         propertiesBrain.properties[textField.tag].number = Int(text) ?? 0
     }
     
