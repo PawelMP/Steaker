@@ -18,23 +18,6 @@ class HistoryViewController: SwipeTableViewController {
     override func viewWillAppear(_ animated: Bool) {
         historyArray = RealmManager.shared.loadHistory()
     }
-
-    //FIXME: - wrzucić do extension metody z delegate TableView
-    // MARK: - Table view data source
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return historyArray?.count ?? 1
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        cell.textLabel?.text = historyArray?[indexPath.row].name ?? K.noCookedSteaks
-        return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: K.segues.detailsSegue, sender: self)
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -46,7 +29,6 @@ class HistoryViewController: SwipeTableViewController {
     }
     
     // MARK: Navigation bar method
-    //FIXME: - Drugi raz tworzysz tutaj Alert z TextFieldami, więc tym bardziej trzeba dodać osobną klasę, która tworzy Ci od razu te textfieldy, zaoszczędzi to w chuj kodu. Do dodawania akcji można stworzyć osobną fabrykę, bo widzę, że akcję różnią się od tamtego alertu.
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
         let alert = UIAlertController(title: K.addNewSteakToHistory, message: nil, preferredStyle: .alert)
@@ -74,4 +56,23 @@ class HistoryViewController: SwipeTableViewController {
         }
     }
     
+}
+
+// MARK: - Table view data source
+extension HistoryViewController {
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return historyArray?.count ?? 1
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        cell.textLabel?.text = historyArray?[indexPath.row].name ?? K.noCookedSteaks
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: K.segues.detailsSegue, sender: self)
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 }

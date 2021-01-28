@@ -42,12 +42,11 @@ class DetailsViewController: SwipeTableViewController {
         }
     }
     
-    //FIXME: - Tutaj jest lipa, lepiej stworzyć osobną klasę do tworzenia Alertów z TextFieldami niż tworzyć to w metodzie na kliknięcie
     @IBAction func addButtonPressed(_ sender: UIButton) {
         
         if let currentSteak = selectedSteak {
             let alert = TextAlert()
-            alert.createAlert(alertTitle: "Add a steak property", texfFieldPlaceholder: "Add new property", selectedItem: currentSteak, tableView: tableView, topVC: self)
+            alert.createAlert(alertTitle: K.addSteakProperty, texfFieldPlaceholder: K.addNewProperty, selectedItem: currentSteak, tableView: tableView, topVC: self)
         }
     }
 }

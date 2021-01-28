@@ -13,6 +13,7 @@ class PropertiesViewController: UITableViewController {
     @IBOutlet weak var nextButton: UIButton!
     
     private var propertiesBrain = PropertyFactory()
+    private var currentTextField: UITextField?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,12 +31,12 @@ class PropertiesViewController: UITableViewController {
     
     // MARK: - Button methods
     @IBAction func nextButtonPressed(_ sender: UIButton) {
+        if let currentTextField = currentTextField {
+                    currentTextField.resignFirstResponder()
+                }
         sender.alpha = 1
-        //FIXME: - propozycja z mojej strony
-        //        let highTempTime = propertiesBrain.getNumber(forIndex: 0)
-        //        let highTempTurns = propertiesBrain.getNumber(forIndex: 1)
-        let highTempTime = propertiesBrain.properties[0].number
-        let highTempTurns = propertiesBrain.properties[1].number
+        let highTempTime = propertiesBrain.getNumber(forIndex: 0)
+        let highTempTurns = propertiesBrain.getNumber(forIndex: 1)
         
         if highTempTime > 0 && highTempTurns > 0 {
             performSegue(withIdentifier: K.segues.cookingSegue, sender: self)
@@ -63,11 +64,11 @@ class PropertiesViewController: UITableViewController {
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        //FIXME: - destination daj do if let i po przecinku tego ifa
-        if segue.identifier == K.segues.cookingSegue {
-            let destinationVC = segue.destination as! CookingViewController
+        
+        if let destinationVC = segue.destination as? CookingViewController,  segue.identifier == K.segues.cookingSegue {
             destinationVC.propertiesBrain = propertiesBrain
         }
+        
     }
 }
 
@@ -78,6 +79,7 @@ extension PropertiesViewController: UITextFieldDelegate {
         textField.text = ""
         textField.placeholder = 0.description
         textField.addDoneButtonOnKeyboard()
+        currentTextField = textField
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -85,10 +87,7 @@ extension PropertiesViewController: UITextFieldDelegate {
             textField.text = 0.description
             return
         }
-        //FIXME: - dodałbym w strukturze metody dwie, dodałem je
-        // w cookingVC tez zaimplementuj te metody wtedy i w każdym innym miejscu gdzie jest to używane
-        //propertiesBrain.setNumber(with: Int(text), forIndex: textField.tag)
-        propertiesBrain.properties[textField.tag].number = Int(text) ?? 0
+        propertiesBrain.setNumber(with: Int(text), forIndex: textField.tag)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

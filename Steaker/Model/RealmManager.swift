@@ -33,7 +33,6 @@ struct RealmManager {
         let newHistory = History()
         do {
             try realm.write(){
-                //let newHistory = History()
                 newHistory.name = text
                 newHistory.dateCreated = Date()
                 realm.add(newHistory)

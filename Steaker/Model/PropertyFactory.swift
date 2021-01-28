@@ -16,7 +16,6 @@ struct PropertyFactory {
         Property(title: " Amount of frying on the same side at low temp ")
     ]
     
-    //FIXME: - dodałem propozycję get i set dla numerów, bo są używane w Properties i warto to zamienić, żeby było bardziej czytelne
     mutating func setNumber(with number: Int?, forIndex index: Int) {
         properties[index].number = number ?? 0
     }

@@ -10,14 +10,6 @@ import UIKit
 
 class TextAlert {
     
-    //FIXME: - Chcialem przy tworzeniu klasy w closure wrzucic RealmManager.shared.saveHistoryItem(...) tylko nie wiedizalem jak wyciagnac textField z tej klasy TextAlert
-//    var realmMethod: (UITextField) -> Void
-//    var textField = UITextField()
-//
-//    init(realmMethod: @escaping (UITextField) -> Void) {
-//        self.realmMethod = realmMethod
-//    }
-    
     func createAlert(alertTitle: String, texfFieldPlaceholder: String, selectedItem: History ,tableView: UITableView, topVC: UIViewController) {
         var textField = UITextField()
         

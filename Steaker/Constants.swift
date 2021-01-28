@@ -31,6 +31,7 @@ struct K {
     static let noAddedProperties = "No added properties yet"
     static let noCookedSteaks = "No previous steaks cooked yet"
     static let addNewProperty = "Add new property"
+    static let addSteakProperty = "Add a steak property"
     static let questionAddMeatToHistory = "Do you want to add this meat to the history?"
     static let addMeatToHistory = "Add meat to the history"
     static let settingsGreaterThanZero = "High temperature settings must be greater than zero"

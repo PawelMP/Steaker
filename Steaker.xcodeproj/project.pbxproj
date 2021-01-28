@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		1A929D7F8028C0F322AAE261 /* Pods_Steaker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5DF8A23895B9E872935BD4 /* Pods_Steaker.framework */; };
 		513E9A0F25371F9400FB9093 /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513E9A0E25371F9400FB9093 /* UIButtonExtension.swift */; };
-		519666CD252E234900BC78D2 /* Uwagi.strings in Resources */ = {isa = PBXBuildFile; fileRef = 519666CC252E234900BC78D2 /* Uwagi.strings */; };
 		D700A51925175353002F3D54 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D700A51825175353002F3D54 /* AppDelegate.swift */; };
 		D700A51B25175353002F3D54 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D700A51A25175353002F3D54 /* SceneDelegate.swift */; };
 		D700A51D25175353002F3D54 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D700A51C25175353002F3D54 /* MainViewController.swift */; };
@@ -38,7 +37,6 @@
 /* Begin PBXFileReference section */
 		2B1606C577821610F3FF6317 /* Pods-Steaker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Steaker.debug.xcconfig"; path = "Target Support Files/Pods-Steaker/Pods-Steaker.debug.xcconfig"; sourceTree = "<group>"; };
 		513E9A0E25371F9400FB9093 /* UIButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtension.swift; sourceTree = "<group>"; };
-		519666CC252E234900BC78D2 /* Uwagi.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Uwagi.strings; sourceTree = "<group>"; };
 		7B5DF8A23895B9E872935BD4 /* Pods_Steaker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Steaker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D700A51525175353002F3D54 /* Steaker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Steaker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D700A51825175353002F3D54 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -146,7 +144,6 @@
 				D700A52325175355002F3D54 /* LaunchScreen.storyboard */,
 				D700A52625175355002F3D54 /* Info.plist */,
 				D700A53525177FB0002F3D54 /* Constants.swift */,
-				519666CC252E234900BC78D2 /* Uwagi.strings */,
 			);
 			path = Steaker;
 			sourceTree = "<group>";
@@ -260,7 +257,6 @@
 				D700A52525175355002F3D54 /* LaunchScreen.storyboard in Resources */,
 				D700A52225175355002F3D54 /* Assets.xcassets in Resources */,
 				D700A54225178B03002F3D54 /* PropertyCell.xib in Resources */,
-				519666CD252E234900BC78D2 /* Uwagi.strings in Resources */,
 				D700A52025175353002F3D54 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

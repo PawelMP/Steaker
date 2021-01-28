@@ -39,11 +39,11 @@ class CookingViewController: UIViewController{
         
         updateTurnsLabel(turns: propertiesBrain.properties[1].number)
         
-        timerLabel.text = propertiesBrain.properties[0].number.description 
+        timerLabel.text = propertiesBrain.getNumber(forIndex: 0).description
         timerProgressView.progress = 0
         
-        highTempTimeInt = propertiesBrain.properties[0].number
-        lowTempTimeInt = propertiesBrain.properties[2].number
+        highTempTimeInt = propertiesBrain.getNumber(forIndex: 0)
+        lowTempTimeInt = propertiesBrain.getNumber(forIndex: 2)
     }
     
     func setupController() {
@@ -79,11 +79,11 @@ class CookingViewController: UIViewController{
                 
                 switch cookingStage {
                 case .highTemperature:
-                    if propertiesBrain.properties[2].number != 0 && propertiesBrain.properties[3].number != 0 {
+                    if propertiesBrain.getNumber(forIndex: 2) != 0 &&  propertiesBrain.getNumber(forIndex: 3) != 0 {
                     cookButton.titleLabel?.text = K.cookLowTemp
                     cookButton.setTitle(K.cookLowTemp, for: .normal)
                     turnsCounter = 0
-                    updateTurnsLabel(turns: propertiesBrain.properties[3].number)
+                    updateTurnsLabel(turns: propertiesBrain.getNumber(forIndex: 3))
                     cookingStage = .lowTemperature
                     }
                 case .lowTemperature:
@@ -106,12 +106,12 @@ class CookingViewController: UIViewController{
     
     @objc
     func updateTimerProgressHighTemp() {
-        updateCooking(tempTime: propertiesBrain.properties[0].number, turns: propertiesBrain.properties[1].number, countTime: &highTempTimeInt)
+        updateCooking(tempTime: propertiesBrain.getNumber(forIndex: 0), turns: propertiesBrain.getNumber(forIndex: 1), countTime: &highTempTimeInt)
     }
     
     @objc
     func updateTimerProgressLowTemp() {
-        updateCooking(tempTime: propertiesBrain.properties[2].number, turns: propertiesBrain.properties[3].number, countTime: &lowTempTimeInt)
+        updateCooking(tempTime: propertiesBrain.getNumber(forIndex: 2), turns: propertiesBrain.getNumber(forIndex: 3), countTime: &lowTempTimeInt)
     }
     
     func setupCook(_ sender: UIButton, title: String, selector: Selector) {
@@ -128,11 +128,11 @@ class CookingViewController: UIViewController{
         switch cookingStage {
         case .highTemperature:
             setupCook(sender,
-                      title: propertiesBrain.properties[0].number.description,
+                      title: propertiesBrain.getNumber(forIndex: 0).description,
                       selector: #selector(updateTimerProgressHighTemp))
         case .lowTemperature:
             setupCook(sender,
-                      title: propertiesBrain.properties[2].number.description,
+                      title: propertiesBrain.getNumber(forIndex: 2).description,
                       selector: #selector(updateTimerProgressLowTemp))
         case .finish:
             //New alert with title
