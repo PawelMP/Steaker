@@ -10,17 +10,8 @@ import UIKit
 
 class MainViewController: UIViewController {
 
-    @IBOutlet weak var previousCookingButton: UIButton!
-    @IBOutlet weak var startCookingButton: UIButton!
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        previousCookingButton.titleLabel?.adjustsFontSizeToFitWidth = true
-        startCookingButton.titleLabel?.adjustsFontSizeToFitWidth = true
-    }
-    
+    @IBOutlet weak var previousCookingButton: UIButton?
+    @IBOutlet weak var startCookingButton: UIButton?
 
     @IBAction func startCookingButtonPressed(_ sender: UIButton) {
         sender.alpha = 1
@@ -45,6 +36,4 @@ class MainViewController: UIViewController {
     @IBAction func previousCookingButtonExit(_ sender: UIButton) {
         sender.alpha = 1
     }
-    
 }
-

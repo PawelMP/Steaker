@@ -10,5 +10,5 @@ import Foundation
 
 struct Property {
     let title: String
-    var time: String = "0"
+    var number: Int = 0
 }

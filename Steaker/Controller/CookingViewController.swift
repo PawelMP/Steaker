@@ -18,57 +18,53 @@ class CookingViewController: UIViewController{
     @IBOutlet weak var timerProgressView: UIProgressView!
     @IBOutlet weak var turnsLeftLabel: UILabel!
     
-    var player: AVAudioPlayer!
+    private var player: AVAudioPlayer!
     
-    var highTempTime: String?
-    var highTempTurns: String?
-    var lowTempTime: String?
-    var lowTempTurns: String?
-
-    var propertiesBrain = PropertyBrain()
+    var propertiesBrain = PropertyFactory()
     
-    var timer = Timer()
+    private var timer = Timer()
     
-    var highTempTimeInt: Int = 0
-    var lowTempTimeInt: Int = 0
-
-    var turnsCounter = 0
+    private var highTempTimeInt: Int = 0
+    private var lowTempTimeInt: Int = 0
+    
+    private var turnsCounter = 0
     
     let realm = try! Realm()
+    private var cookingStage: CookButtonType = .highTemperature
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        cookButton.contentHorizontalAlignment = .center
-        cookButton.titleLabel?.textAlignment = .center
+        setupController()
         
-        timerLabel.adjustsFontForContentSizeCategory = true
-        turnsLeftLabel.adjustsFontForContentSizeCategory = true
+        updateTurnsLabel(turns: propertiesBrain.properties[1].number)
         
-        updateTurnsLabel(turns: Int(highTempTurns!)!)
-        
-        timerLabel.text = highTempTime!
+        timerLabel.text = propertiesBrain.getNumber(forIndex: 0).description
         timerProgressView.progress = 0
         
-        highTempTimeInt = Int(highTempTime!)!
-        lowTempTimeInt = Int(lowTempTime!)!
+        highTempTimeInt = propertiesBrain.getNumber(forIndex: 0)
+        lowTempTimeInt = propertiesBrain.getNumber(forIndex: 2)
     }
     
-    func updateTurnsLabel (turns: Int) {
-        if cookButton.titleLabel?.text == (K.cookHighTemp) {
-            turnsLeftLabel.text = "\(K.turnsLeftAtHighTemp) \(turns * 2 - turnsCounter - 1)"
-        } else if cookButton.titleLabel?.text == (K.cookLowTemp){
-            turnsLeftLabel.text = "\(K.turnsLeftAtHighTemp) \(turns * 2 - turnsCounter - 1)"
-        }
-        
+    func setupController() {
+        cookButton.titleLabel?.textAlignment = .center
     }
-     
+    
+    func updateTurnsLabel(turns: Int) {
+        if cookButton.titleLabel?.text == K.cookHighTemp {
+            turnsLeftLabel.text = "\(K.turnsLeftAtHighTemp) \(turns * 2 - turnsCounter - 1)"
+        } else if cookButton.titleLabel?.text == K.cookLowTemp {
+            turnsLeftLabel.text = "\(K.turnsLeftAtLowTemp) \(turns * 2 - turnsCounter - 1)"
+        }
+    }
+    
+    @discardableResult
     func updateCooking (tempTime: Int, turns: Int, countTime: inout Int) -> Int {
         let accuracy = 1.0/Float(tempTime)
         updateTurnsLabel(turns: turns)
         
         if countTime  > 0 {
-            timerLabel.text = String(countTime - 1)
+            timerLabel.text = (countTime - 1).description
             countTime  -= 1
             timerProgressView.progress += accuracy
         }
@@ -81,147 +77,122 @@ class CookingViewController: UIViewController{
                 timerLabel.text = K.doneText
                 cookButton.isHidden = false
                 
-                if cookButton.titleLabel?.text == (K.cookHighTemp) && lowTempTime != 0.description {
-                    cookButton.setTitle(K.cookLowTemp, for: .normal)
+                switch cookingStage {
+                case .highTemperature:
+                    if propertiesBrain.getNumber(forIndex: 2) != 0 &&  propertiesBrain.getNumber(forIndex: 3) != 0 {
                     cookButton.titleLabel?.text = K.cookLowTemp
+                    cookButton.setTitle(K.cookLowTemp, for: .normal)
                     turnsCounter = 0
-                    updateTurnsLabel(turns: Int(lowTempTurns!)!)
-                } else if cookButton.titleLabel?.text == (K.cookLowTemp) {
+                    updateTurnsLabel(turns: propertiesBrain.getNumber(forIndex: 3))
+                    cookingStage = .lowTemperature
+                    }
+                case .lowTemperature:
                     cookButton.setTitle(K.finishCooking, for: .normal)
-                } else {
+                    cookingStage = .finish
+                case .finish:
                     cookButton.setTitle(K.finishCooking, for: .normal)
+                    cookingStage = .finish
                 }
-                
                 turnsCounter = 0
             } else {
-                timerLabel.text = String(tempTime)
+                timerLabel.text = tempTime.description
                 timerProgressView.progress = 0
                 updateTurnsLabel(turns: turns)
-                countTime  = tempTime
-                
+                countTime = tempTime
             }
         }
         return countTime
     }
     
-    @objc func updateTimerProgressHighTemp() {
-        updateCooking(tempTime: Int(highTempTime!)!, turns: Int(highTempTurns!)!, countTime: &highTempTimeInt)
+    @objc
+    func updateTimerProgressHighTemp() {
+        updateCooking(tempTime: propertiesBrain.getNumber(forIndex: 0), turns: propertiesBrain.getNumber(forIndex: 1), countTime: &highTempTimeInt)
     }
     
-    @objc func updateTimerProgressLowTemp() {
-        updateCooking(tempTime: Int(lowTempTime!)!, turns: Int(lowTempTurns!)!, countTime: &lowTempTimeInt)
+    @objc
+    func updateTimerProgressLowTemp() {
+        updateCooking(tempTime: propertiesBrain.getNumber(forIndex: 2), turns: propertiesBrain.getNumber(forIndex: 3), countTime: &lowTempTimeInt)
     }
-
+    
+    func setupCook(_ sender: UIButton, title: String, selector: Selector) {
+        timerProgressView.progress = 0
+        turnsLeftLabel.isHidden = false
+        sender.isHidden = true
+        
+        timerLabel.text = title
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: selector, userInfo: nil, repeats: true)
+    }
+    
     @IBAction func cookButtonPressed(_ sender: UIButton) {
-
-        if sender.titleLabel?.text == K.cookHighTemp {
-            
-            timerProgressView.progress = 0
-            turnsLeftLabel.isHidden = false
-            sender.isHidden = true
-            //turnsLeftLabel.text = "Turns left at high temp: \(Int(highTempTurns!)! * 2 - turnsCounter - 1)"
-            
-            timerLabel.text = highTempTime!
-            timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimerProgressHighTemp), userInfo: nil, repeats: true)
-            
-        } else if sender.titleLabel?.text == K.cookLowTemp {
-            
-            timerProgressView.progress = 0
-            turnsLeftLabel.isHidden = false
-            sender.isHidden = true
-            //updateTurnsLabel(turns: Int(lowTempTurns!)!)
-            //turnsLeftLabel.text = "Turns left at low temp: \(Int(lowTempTurns!)! * 2 - turnsCounter - 1)"
-            
-            timerLabel.text = lowTempTime!
-            timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimerProgressLowTemp), userInfo: nil, repeats: true)
-        } else {
-            //Text field for history alert placeholders 
-            var nameTextField = UITextField()
-            var noteTextField = UITextField()
-            
+        
+        switch cookingStage {
+        case .highTemperature:
+            setupCook(sender,
+                      title: propertiesBrain.getNumber(forIndex: 0).description,
+                      selector: #selector(updateTimerProgressHighTemp))
+        case .lowTemperature:
+            setupCook(sender,
+                      title: propertiesBrain.getNumber(forIndex: 2).description,
+                      selector: #selector(updateTimerProgressLowTemp))
+        case .finish:
             //New alert with title
-            let alert = UIAlertController(title: "Do you want to add this meat to the history?", message: nil, preferredStyle: .alert)
+            let alert = UIAlertController(title: K.questionAddMeatToHistory, message: nil, preferredStyle: .alert)
             
             //New alert for adding to the history
-            let historyAlert = UIAlertController(title: "Add meat to the history", message: "", preferredStyle: .alert)
+            let historyAlert = UIAlertController(title: K.addMeatToHistory, message: nil, preferredStyle: .alert)
+            let historyAlertTextField = AlertTextField(alert: historyAlert)
+            let nameTextField = historyAlertTextField.initializeTextField(text: K.name)
+            let noteTextField = historyAlertTextField.initializeTextField(text: K.notes)
             
             //Press Yes button on the alert window
-            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) in
+            alert.addAction(UIAlertAction(title: K.yes, style: .default, handler: { (UIAlertAction) in
                 self.present(historyAlert, animated: true)
             }))
             
             //Press no button on the alert window
-            alert.addAction(UIAlertAction(title: "No", style: .destructive, handler: { (UIAlertAction) in
+            alert.addAction(UIAlertAction(title: K.no, style: .destructive, handler: { (UIAlertAction) in
                 self.navigationController?.popToRootViewController(animated: true)
             }))
             
             //Press cancel on the alert window
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (UIAlertAction) in
+            alert.addAction(UIAlertAction(title: K.cancel, style: .cancel, handler: { (UIAlertAction) in
             }))
             
-            
-            
             //Press add button on the history alerty window
-            historyAlert.addAction(UIAlertAction(title: "Add", style: .default, handler: { (UIAlertAction) in
+            historyAlert.addAction(UIAlertAction(title: K.add, style: .default, handler: { (UIAlertAction) in
                 
-                let newHistoryItem = History()
-                let contentArray = [self.highTempTime,self.highTempTurns,self.lowTempTime,self.lowTempTurns]
-                
-                if nameTextField.text?.isEmpty == false /*!= ""*/ {
-                    newHistoryItem.name = nameTextField.text!
-                    newHistoryItem.dateCreated = Date()
-                    do {
-                        try self.realm.write(){
-                            self.realm.add(newHistoryItem)
-                            
-                            if noteTextField.text?.isEmpty == false /*!= ""*/ {
-                                let newPropertyItem = HistoryItem()
-                                newPropertyItem.title = " " + noteTextField.text! + " "
-                                newPropertyItem.dateCreated = Date()
-                                newHistoryItem.items.append(newPropertyItem)
-                            }
-                            
-                            for index in 0...3 {
-                                let newPropertyItem = HistoryItem()
-                                newPropertyItem.title = self.propertiesBrain.properties[index].title + " \(contentArray[index]!)"
-                                newPropertyItem.dateCreated = Date()
-                                newHistoryItem.items.append(newPropertyItem)
-                            }
-                            
-                            
-                            self.navigationController?.popToRootViewController(animated: true)
-                        }
-                    } catch {
-                        print("Error saving history item to Realm, \(error)")
+                if nameTextField.text?.isEmpty == false {
+                    let history = RealmManager.shared.saveHistory(text: nameTextField.text!)
+                    
+                    for index in (0...3).reversed() {
+                        RealmManager.shared.saveHistoryItem(currentSteak: history, text: self.propertiesBrain.properties[index].title + self.propertiesBrain.properties[index].number.description)
                     }
+                    
+                    if noteTextField.text?.isEmpty == false {
+                        RealmManager.shared.saveHistoryItem(currentSteak: history, text: noteTextField.text!)
+                    }
+                    self.navigationController?.popToRootViewController(animated: true)
                 }
             }))
             
             //Press no button on the history alert window
-            historyAlert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: { (UIAlertAction) in
+            historyAlert.addAction(UIAlertAction(title: K.cancel, style: .destructive, handler: { (UIAlertAction) in
             }))
-            
-            //Textfields for this history Alert
-            historyAlert.addTextField { (alertTextField) in
-                alertTextField.placeholder = "Name"
-                alertTextField.autocapitalizationType = .sentences
-                nameTextField = alertTextField
-            }
-            historyAlert.addTextField { (alertTextField) in
-                alertTextField.placeholder = "Notes"
-                alertTextField.autocapitalizationType = .sentences
-                noteTextField = alertTextField
-            }
-            
-            //Present alert
             present(alert, animated: true)
         }
+        
     }
     
-    func playSound() {
-           let url = Bundle.main.url(forResource: "bell", withExtension: "wav")
-           player = try! AVAudioPlayer(contentsOf: url!)
-           player.play()
-                   
-       }
+    private func playSound() {
+        guard let url = Bundle.main.url(forResource: "bell", withExtension: "wav") else {
+            return
+        }
+        do {
+            player = try AVAudioPlayer(contentsOf: url)
+        } catch {
+            print(error)
+            return
+        }
+        player.play()
+    }
 }

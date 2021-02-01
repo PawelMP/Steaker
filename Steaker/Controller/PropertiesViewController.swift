@@ -10,68 +10,43 @@ import UIKit
 
 class PropertiesViewController: UITableViewController {
 
-    
     @IBOutlet weak var nextButton: UIButton!
-    var propertiesBrain = PropertyBrain()
     
+    private var propertiesBrain = PropertyFactory()
+    private var currentTextField: UITextField?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        nextButton.layer.masksToBounds = true
+        setupTableView()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         nextButton.layer.cornerRadius = nextButton.frame.size.height / 5
-        
-        tableView.rowHeight = 60
-        
-        tableView.register(UINib(nibName: K.cellNibName, bundle: nil), forCellReuseIdentifier: K.cellIdentifier)
-        
     }
     
-    
-    // MARK: - Table view data source
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return propertiesBrain.properties.count
-    }
-
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.cellIdentifier, for: indexPath) as! PropertyCell
-        
-        cell.label.text = propertiesBrain.properties[indexPath.row].title
-        cell.timeTextField.text = propertiesBrain.properties[indexPath.row].time
-        
-        cell.timeTextField.tag = indexPath.row
-        cell.timeTextField.delegate = self
-
-        return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-       return 50
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-       let footerView = UIView()
-        footerView.backgroundColor = UIColor.clear
-       return footerView
+    private func setupTableView() {
+        tableView.register(UINib(nibName: PropertyCell.cellNibName, bundle: nil), forCellReuseIdentifier: PropertyCell.cellIdentifier)
     }
     
     // MARK: - Button methods
     @IBAction func nextButtonPressed(_ sender: UIButton) {
+        if let currentTextField = currentTextField {
+                    currentTextField.resignFirstResponder()
+                }
         sender.alpha = 1
-        let highTempTime = Int(propertiesBrain.properties[0].time) ?? 0
-        let highTempTurns = Int(propertiesBrain.properties[1].time) ?? 0
+        let highTempTime = propertiesBrain.getNumber(forIndex: 0)
+        let highTempTurns = propertiesBrain.getNumber(forIndex: 1)
         
         if highTempTime > 0 && highTempTurns > 0 {
-        performSegue(withIdentifier: K.segues.cookingSegue, sender: self)
+            performSegue(withIdentifier: K.segues.cookingSegue, sender: self)
         } else {
             
             //New alert with title
-            let alert = UIAlertController(title: "High temperature settings must be greater than zero", message: nil, preferredStyle: .alert)
+            let alert = UIAlertController(title: K.settingsGreaterThanZero, message: nil, preferredStyle: .alert)
                 
             //Press ok button on the alert window
-            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { (UIAlertAction) in
+            alert.addAction(UIAlertAction(title: K.ok, style: .cancel, handler: { (UIAlertAction) in
             }))
             
             //Present alert
@@ -90,36 +65,30 @@ class PropertiesViewController: UITableViewController {
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == K.segues.cookingSegue {
-            let destinationVC = segue.destination as! CookingViewController
-            destinationVC.highTempTime = propertiesBrain.properties[0].time
-            destinationVC.highTempTurns = propertiesBrain.properties[1].time
-            destinationVC.lowTempTime = propertiesBrain.properties[2].time
-            destinationVC.lowTempTurns = propertiesBrain.properties[3].time
+        if let destinationVC = segue.destination as? CookingViewController,  segue.identifier == K.segues.cookingSegue {
+            destinationVC.propertiesBrain = propertiesBrain
         }
+        
     }
-    
 }
 
 // MARK: - TextField Delegate Methods
-
 extension PropertiesViewController: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.text = ""
         textField.placeholder = 0.description
         textField.addDoneButtonOnKeyboard()
+        currentTextField = textField
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField.text!.isEmpty {
+        guard let text = textField.text, !text.isEmpty else {
             textField.text = 0.description
+            return
         }
-        
-        let row = textField.tag
-        propertiesBrain.properties[row].time = textField.text!
+        propertiesBrain.setNumber(with: Int(text), forIndex: textField.tag)
     }
-    
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -127,38 +96,30 @@ extension PropertiesViewController: UITextFieldDelegate {
     }
 }
 
+    // MARK: - Table view data source
+extension PropertiesViewController  {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return propertiesBrain.properties.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-//MARK: - TextField extension (add button)
-extension UITextField{
-    @IBInspectable var doneAccessory: Bool{
-        get{
-            return self.doneAccessory
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PropertyCell.cellIdentifier, for: indexPath) as? PropertyCell else {
+            return UITableViewCell()
         }
-        set (hasDone) {
-            if hasDone{
-                addDoneButtonOnKeyboard()
-            }
-        }
+        
+        cell.setupCell(with: propertiesBrain, for: indexPath)
+        cell.timeTextField.delegate = self
+
+        return cell
     }
     
-    func addDoneButtonOnKeyboard()
-    {
-        let doneToolbar: UIToolbar = UIToolbar(frame: CGRect.init(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
-        doneToolbar.barStyle = .default
-        
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let done: UIBarButtonItem = UIBarButtonItem(title: K.doneText, style: .done, target: self, action: #selector(self.doneButtonAction))
-        
-        let items = [flexSpace, done]
-        doneToolbar.items = items
-        doneToolbar.sizeToFit()
-        
-        self.inputAccessoryView = doneToolbar
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+       return 50
     }
     
-    @objc func doneButtonAction()
-    {
-        self.resignFirstResponder()
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footerView = UIView()
+        return footerView
     }
 }
-

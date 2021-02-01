@@ -10,33 +10,37 @@ import UIKit
 import SwipeCellKit
 
 class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegate {
+    
+    private var cellFontSize: CGFloat = 20
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.rowHeight = 60.0
-    }
     //MARK: - TableView data source Methods
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60.0
+    }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.normalCell, for: indexPath) as! SwipeTableViewCell
-        cell.textLabel?.adjustsFontSizeToFitWidth = true
-        cell.textLabel?.font = UIFont(name: "Copperplate", size: 20)
-        
-        cell.delegate = self
-        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: K.normalCell, for: indexPath) as? SwipeTableViewCell else {
+            return UITableViewCell()
+        }
+        self.tableView(cell, setupCellForRowAt: indexPath)
         return cell
     }
     
+    func tableView(_ cell: SwipeTableViewCell, setupCellForRowAt indexPath: IndexPath) {
+        cell.textLabel?.adjustsFontSizeToFitWidth = true
+        cell.textLabel?.font = UIFont(name: K.fontCopperplate, size: cellFontSize)
+        cell.delegate = self
+    }
+
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         guard orientation == .right else { return nil }
 
-        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+        let deleteAction = SwipeAction(style: .destructive, title: K.delete) { action, indexPath in
             self.updateModel(at: indexPath)
         }
 
-        // customize the action appearance
-        deleteAction.image = UIImage(named: "delete-icon")
+        deleteAction.image = UIImage(named: K.deleteIcon)
     
         return [deleteAction]
     }
@@ -47,9 +51,8 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         return options
     }
     
+    //MARK: - Update Data Model
     func updateModel(at indexPath: IndexPath) {
-        //Update data model
     }
-    
 }
 
