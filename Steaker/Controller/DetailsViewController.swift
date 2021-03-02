@@ -24,55 +24,81 @@ class DetailsViewController: SwipeTableViewController {
     
     @IBOutlet weak var addPropertyButton: UIButton!
     
+    // MARK: - View controller lifecycle methods
+    
     override func viewWillAppear(_ animated: Bool) {
         setupTableView()
     }
     
     private func setupTableView() {
-        let backgroundImage = UIImage(named: "Background")
-        let imageView = UIImageView(image: backgroundImage)
-        imageView.contentMode = .scaleAspectFill
-        tableView.backgroundView = UIImageView(image: backgroundImage)
+        tableView.backgroundView = K.Design.Image.HistoryItemsTableViewBackgroundImageView
+        //Turn off delays of touch down gestures
+        tableView.delaysContentTouches = false
+    }
+    
+    // MARK: - UI action methods
+    
+    @IBAction func addButtonPressed(_ sender: UIButton) {
+        sender.alpha = 1
+        addProperty()
+    }
+    
+    //Create alert for adding property to the steak history
+    func addProperty() {
+        if let currentSteak = selectedSteak {
+            let alert = Alert()
+            alert.createAlertWithTextfield(title: K.Content.AddSteakProperty, placeholder: K.Content.AddNewProperty, viewController: self, completionHandler: { name in
+                RealmManager.shared.saveHistoryItem(currentSteak: currentSteak, text: name)
+                self.tableView.reloadData()
+            })
+        }
+    }
+    
+    @IBAction func addButtonTouched(_ sender: UIButton) {
+        sender.alpha = 0.5
+    }
+    
+    @IBAction func addButtonExit(_ sender: UIButton) {
+        sender.alpha = 1
     }
     
     // MARK: - SwipeTable update method
+    //Delete history object when cell is swiped
     override func updateModel(at indexPath: IndexPath) {
         if let categoryForDeletion = self.steakItems?[indexPath.row] {
             RealmManager.shared.remove(category: categoryForDeletion)
         }
     }
     
-    @IBAction func addButtonPressed(_ sender: UIButton) {
-        
-        if let currentSteak = selectedSteak {
-            let alert = TextAlert()
-            alert.createAlert(alertTitle: K.addSteakProperty, texfFieldPlaceholder: K.addNewProperty, selectedItem: currentSteak, tableView: tableView, topVC: self)
-        }
-    }
 }
 
 // MARK: - Table view data source
+
 extension DetailsViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return steakItems?.count ?? 1
+        return steakItems?.count ?? 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
+        //call parent class method
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        cell.textLabel?.text = steakItems?[indexPath.row].title ?? K.noAddedProperties
-        cell.textLabel?.textColor = UIColor.white
+        cell.textLabel?.text = steakItems?[indexPath.row].title
+        cell.textLabel?.textColor = K.Design.Color.White
         
         return cell
     }
-    
+}
+
+// MARK: - Table view delegate
+
+extension DetailsViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.backgroundColor = UIColor(white: 0, alpha: 0.2)
+        cell.backgroundColor = K.Design.Color.LowAlpha
     }
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -81,7 +107,8 @@ extension DetailsViewController {
     
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView = UIView()
-        footerView.backgroundColor = UIColor.clear
+        footerView.backgroundColor = K.Design.Color.Clear
         return footerView
     }
 }
+

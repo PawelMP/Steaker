@@ -7,44 +7,70 @@
 //
 
 import Foundation
+import UIKit
+import RealmSwift
 
 struct K {
-    static let doneText = "Done"
     
-    static let cookHighTemp = "Cook high temp!"
-    static let cookLowTemp = "Cook low temp!"
-    static let turnsLeftAtHighTemp = "Turns left at high temp:"
-    static let turnsLeftAtLowTemp = "Turns left at low temp:"
-    static let finishCooking = "Finish cooking"
+    struct Design {
+        struct Color {
+            static let White = UIColor.white
+            static let Clear = UIColor.clear
+            static let LowAlpha = UIColor(white: 0, alpha: 0.2)
+        }
+        struct Image {
+            static let HistoryItemsTableViewBackgroundImage = UIImage(named: "Background")
+            static let HistoryItemsTableViewBackgroundImageView = UIImageView(image: HistoryItemsTableViewBackgroundImage)
+            static let Delete = UIImage(named: "delete-icon")
+        }
+        struct Font {
+            static let Copperplate = UIFont(name: "Copperplate", size: 20)
+        }
+    }
     
-    static let normalCell = "Cell"
+    struct Content {
+        static let Add = "Add"
+        static let Cancel = "Cancel"
+        static let Done = "Done"
+        static let OK = "OK"
+        static let Delete = "Delete"
+        
+        static let AddNewSteakToHistory = "Add new steak to history"
+        static let TurnsLeftAtHighTemp = "Turns left at high temp:"
+        static let TurnsLeftAtLowTemp = "Turns left at low temp:"
+        static let FinishCooking = "Finish cooking"
+        
+        static let DateCreated = "dateCreated"
+        static let AddNewProperty = "Add new property"
+        static let AddSteakProperty = "Add a steak property"
+        static let SettingsGreaterThanZero = "High temperature settings must be greater than zero"
+        static let EnterNameOfSteak = "You must enter the name of the steak"
+        
+        static let Cell = "Cell"
+        
+    }
+    
+    struct API {
+        static let DB_REF = try! Realm()
+        static let HISTORY_REF = DB_REF.objects(History.self)
+    }
+    
+    struct Sound {
+        static let Bell = "bell"
+        static let wav = "wav"
+    }
     
     struct segues {
         static let historySegue = "toHistory"
         static let detailsSegue = "historyToDetails"
         static let propertiesSegue = "toProperties"
         static let cookingSegue = "toCooking"
+        static let finishSegue = "toFinishCooking"
     }
     
-    static let addNewSteakToHistory = "Add new steak cooked to history"
-    static let dateCreated = "dateCreated"
-    static let noAddedProperties = "No added properties yet"
-    static let noCookedSteaks = "No previous steaks cooked yet"
-    static let addNewProperty = "Add new property"
-    static let addSteakProperty = "Add a steak property"
-    static let questionAddMeatToHistory = "Do you want to add this meat to the history?"
-    static let addMeatToHistory = "Add meat to the history"
-    static let settingsGreaterThanZero = "High temperature settings must be greater than zero"
-    
-    static let add = "Add"
-    static let yes = "Yes"
-    static let no = "No"
-    static let ok = "OK"
-    static let cancel = "Cancel"
-    static let delete = "Delete"
-    static let deleteIcon = "delete-icon"
-    static let name = "Name"
-    static let notes = "Notes"
-    
-    static let fontCopperplate = "Copperplate"
+    struct PropertyCell {
+        static let cellIdentifier = "ReusableCell"
+        static let cellNibName = "PropertyCell"
+    }
+
 }

@@ -10,8 +10,6 @@ import UIKit
 import SwipeCellKit
 
 class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegate {
-    
-    private var cellFontSize: CGFloat = 20
 
     //MARK: - TableView data source Methods
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -20,7 +18,7 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: K.normalCell, for: indexPath) as? SwipeTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: K.Content.Cell, for: indexPath) as? SwipeTableViewCell else {
             return UITableViewCell()
         }
         self.tableView(cell, setupCellForRowAt: indexPath)
@@ -29,18 +27,18 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
     
     func tableView(_ cell: SwipeTableViewCell, setupCellForRowAt indexPath: IndexPath) {
         cell.textLabel?.adjustsFontSizeToFitWidth = true
-        cell.textLabel?.font = UIFont(name: K.fontCopperplate, size: cellFontSize)
+        cell.textLabel?.font = K.Design.Font.Copperplate
         cell.delegate = self
     }
 
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         guard orientation == .right else { return nil }
 
-        let deleteAction = SwipeAction(style: .destructive, title: K.delete) { action, indexPath in
+        let deleteAction = SwipeAction(style: .destructive, title: K.Content.Delete) { action, indexPath in
             self.updateModel(at: indexPath)
         }
 
-        deleteAction.image = UIImage(named: K.deleteIcon)
+        deleteAction.image = K.Design.Image.Delete
     
         return [deleteAction]
     }
@@ -52,6 +50,7 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
     }
     
     //MARK: - Update Data Model
+    
     func updateModel(at indexPath: IndexPath) {
     }
 }

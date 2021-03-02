@@ -11,11 +11,11 @@ import UIKit
 class PropertyCell: UITableViewCell {
     
     class var cellIdentifier: String {
-         return "ReusableCell"
+        return K.PropertyCell.cellIdentifier
     }
     
     class var cellNibName: String {
-        return "PropertyCell"
+        return K.PropertyCell.cellNibName
     }
     
     @IBOutlet weak var label: UILabel!
@@ -29,6 +29,7 @@ class PropertyCell: UITableViewCell {
         
         label.adjustsFontSizeToFitWidth = true
         timeTextField.adjustsFontSizeToFitWidth = true
+        timeTextField.addDoneButtonOnKeyboard()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -37,7 +38,6 @@ class PropertyCell: UITableViewCell {
     
     func setupCell(with property: PropertyFactory, for indexPath: IndexPath) {
         label.text = property.properties[indexPath.row].title
-        //cell.timeTextField.text = propertiesBrain.properties[indexPath.row].time
         timeTextField.tag = indexPath.row
     }
     

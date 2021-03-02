@@ -25,13 +25,13 @@
 		D700A5482517995A002F3D54 /* PropertyFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D700A5472517995A002F3D54 /* PropertyFactory.swift */; };
 		D700A54C2517C0B5002F3D54 /* CookingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D700A54B2517C0B5002F3D54 /* CookingViewController.swift */; };
 		D73875B8251FC7A4009A575A /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73875B7251FC7A4009A575A /* SwipeTableViewController.swift */; };
+		D75EE1B025EDA90300C08DC4 /* FinishCookingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75EE1AF25EDA90300C08DC4 /* FinishCookingViewController.swift */; };
 		D7ABA4DA251D27EF004712E5 /* HistoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7ABA4D9251D27EF004712E5 /* HistoryItem.swift */; };
 		D7C5E65625189F2C00A9F2D4 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7C5E65525189F2C00A9F2D4 /* History.swift */; };
 		D7DD9696253892B200F7C50C /* UITextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7DD9695253892B200F7C50C /* UITextFieldExtension.swift */; };
 		D7E748F125209398008C98EE /* bell.wav in Resources */ = {isa = PBXBuildFile; fileRef = D7E748F025209398008C98EE /* bell.wav */; };
 		D7E99AF42537459200A48292 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E99AF32537459200A48292 /* RealmManager.swift */; };
-		D7E99AF62537488500A48292 /* TextAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E99AF52537488500A48292 /* TextAlert.swift */; };
-		D7E99AFD25377BF100A48292 /* AlertTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E99AFC25377BF100A48292 /* AlertTextField.swift */; };
+		D7E99AF62537488500A48292 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E99AF52537488500A48292 /* Alert.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,13 +56,13 @@
 		D700A5472517995A002F3D54 /* PropertyFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyFactory.swift; sourceTree = "<group>"; };
 		D700A54B2517C0B5002F3D54 /* CookingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookingViewController.swift; sourceTree = "<group>"; };
 		D73875B7251FC7A4009A575A /* SwipeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTableViewController.swift; sourceTree = "<group>"; };
+		D75EE1AF25EDA90300C08DC4 /* FinishCookingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishCookingViewController.swift; sourceTree = "<group>"; };
 		D7ABA4D9251D27EF004712E5 /* HistoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryItem.swift; sourceTree = "<group>"; };
 		D7C5E65525189F2C00A9F2D4 /* History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
 		D7DD9695253892B200F7C50C /* UITextFieldExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldExtension.swift; sourceTree = "<group>"; };
 		D7E748F025209398008C98EE /* bell.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bell.wav; sourceTree = "<group>"; };
 		D7E99AF32537459200A48292 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
-		D7E99AF52537488500A48292 /* TextAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAlert.swift; sourceTree = "<group>"; };
-		D7E99AFC25377BF100A48292 /* AlertTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertTextField.swift; sourceTree = "<group>"; };
+		D7E99AF52537488500A48292 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		F5F0D2512BA19539294653BD /* Pods-Steaker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Steaker.release.xcconfig"; path = "Target Support Files/Pods-Steaker/Pods-Steaker.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -156,8 +156,7 @@
 				D7C5E65525189F2C00A9F2D4 /* History.swift */,
 				D7ABA4D9251D27EF004712E5 /* HistoryItem.swift */,
 				D7E99AF32537459200A48292 /* RealmManager.swift */,
-				D7E99AF52537488500A48292 /* TextAlert.swift */,
-				D7E99AFC25377BF100A48292 /* AlertTextField.swift */,
+				D7E99AF52537488500A48292 /* Alert.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -178,6 +177,7 @@
 				D700A51C25175353002F3D54 /* MainViewController.swift */,
 				D700A54325178D41002F3D54 /* PropertiesViewController.swift */,
 				D700A54B2517C0B5002F3D54 /* CookingViewController.swift */,
+				D75EE1AF25EDA90300C08DC4 /* FinishCookingViewController.swift */,
 				D700A52F2517761E002F3D54 /* HistoryViewController.swift */,
 				D700A53125177B8C002F3D54 /* DetailsViewController.swift */,
 				D73875B7251FC7A4009A575A /* SwipeTableViewController.swift */,
@@ -314,14 +314,14 @@
 				D700A54C2517C0B5002F3D54 /* CookingViewController.swift in Sources */,
 				D700A51D25175353002F3D54 /* MainViewController.swift in Sources */,
 				D700A54125178B03002F3D54 /* PropertyCell.swift in Sources */,
-				D7E99AF62537488500A48292 /* TextAlert.swift in Sources */,
+				D7E99AF62537488500A48292 /* Alert.swift in Sources */,
 				D700A5482517995A002F3D54 /* PropertyFactory.swift in Sources */,
 				D700A51925175353002F3D54 /* AppDelegate.swift in Sources */,
 				D7C5E65625189F2C00A9F2D4 /* History.swift in Sources */,
 				D700A51B25175353002F3D54 /* SceneDelegate.swift in Sources */,
 				D700A53625177FB0002F3D54 /* Constants.swift in Sources */,
+				D75EE1B025EDA90300C08DC4 /* FinishCookingViewController.swift in Sources */,
 				D7E99AF42537459200A48292 /* RealmManager.swift in Sources */,
-				D7E99AFD25377BF100A48292 /* AlertTextField.swift in Sources */,
 				D7DD9696253892B200F7C50C /* UITextFieldExtension.swift in Sources */,
 				D700A5302517761E002F3D54 /* HistoryViewController.swift in Sources */,
 				D73875B8251FC7A4009A575A /* SwipeTableViewController.swift in Sources */,

@@ -12,6 +12,12 @@ class MainViewController: UIViewController {
 
     @IBOutlet weak var previousCookingButton: UIButton?
     @IBOutlet weak var startCookingButton: UIButton?
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        startCookingButton?.titleLabel?.adjustsFontSizeToFitWidth = true
+        previousCookingButton?.titleLabel?.adjustsFontSizeToFitWidth = true 
+    }
 
     @IBAction func startCookingButtonPressed(_ sender: UIButton) {
         sender.alpha = 1

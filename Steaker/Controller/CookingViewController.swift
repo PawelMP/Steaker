@@ -32,11 +32,16 @@ class CookingViewController: UIViewController{
     let realm = try! Realm()
     private var cookingStage: CookButtonType = .highTemperature
     
+    // MARK: - View controller lifecycle methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupController()
-        
+    }
+    
+    func setupController() {
+        cookButton.titleLabel?.textAlignment = .center
+        cookButton.titleLabel?.adjustsFontSizeToFitWidth = true
         updateTurnsLabel(turns: propertiesBrain.properties[1].number)
         
         timerLabel.text = propertiesBrain.getNumber(forIndex: 0).description
@@ -46,20 +51,55 @@ class CookingViewController: UIViewController{
         lowTempTimeInt = propertiesBrain.getNumber(forIndex: 2)
     }
     
-    func setupController() {
-        cookButton.titleLabel?.textAlignment = .center
-    }
-    
-    func updateTurnsLabel(turns: Int) {
-        if cookButton.titleLabel?.text == K.cookHighTemp {
-            turnsLeftLabel.text = "\(K.turnsLeftAtHighTemp) \(turns * 2 - turnsCounter - 1)"
-        } else if cookButton.titleLabel?.text == K.cookLowTemp {
-            turnsLeftLabel.text = "\(K.turnsLeftAtLowTemp) \(turns * 2 - turnsCounter - 1)"
+    // MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if let destinationVC = segue.destination as? FinishCookingViewController,  segue.identifier == K.segues.finishSegue {
+            destinationVC.propertiesBrain = propertiesBrain
         }
+        
     }
     
-    @discardableResult
-    func updateCooking (tempTime: Int, turns: Int, countTime: inout Int) -> Int {
+    // MARK: - UI action methods
+    
+    @IBAction func cookButtonPressed(_ sender: UIButton) {
+        
+        switch cookingStage {
+        case .highTemperature:
+            setupCook(sender,
+                      title: propertiesBrain.getNumber(forIndex: 0).description,
+                      selector: #selector(updateTimerProgressHighTemp))
+        case .lowTemperature:
+            setupCook(sender,
+                      title: propertiesBrain.getNumber(forIndex: 2).description,
+                      selector: #selector(updateTimerProgressLowTemp))
+        case .finish:
+            performSegue(withIdentifier: K.segues.finishSegue, sender: self)
+        }
+        
+    }
+    
+    //Set UI and timer for cooking
+    func setupCook(_ sender: UIButton, title: String, selector: Selector) {
+        timerProgressView.progress = 0
+        turnsLeftLabel.isHidden = false
+        sender.isHidden = true
+        
+        timerLabel.text = title
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: selector, userInfo: nil, repeats: true)
+    }
+    
+    //Methods for "passing" updateCooking method as selector
+    @objc func updateTimerProgressHighTemp() {
+        updateCooking(tempTime: propertiesBrain.getNumber(forIndex: 0), turns: propertiesBrain.getNumber(forIndex: 1), countTime: &highTempTimeInt)
+    }
+    
+    @objc func updateTimerProgressLowTemp() {
+        updateCooking(tempTime: propertiesBrain.getNumber(forIndex: 2), turns: propertiesBrain.getNumber(forIndex: 3), countTime: &lowTempTimeInt)
+    }
+    
+    //Update cooking time
+    @discardableResult func updateCooking (tempTime: Int, turns: Int, countTime: inout Int) -> Int {
         let accuracy = 1.0/Float(tempTime)
         updateTurnsLabel(turns: turns)
         
@@ -74,23 +114,29 @@ class CookingViewController: UIViewController{
             
             if turnsCounter == turns * 2 {
                 timer.invalidate()
-                timerLabel.text = K.doneText
+                timerLabel.text = K.Content.Done
                 cookButton.isHidden = false
                 
                 switch cookingStage {
                 case .highTemperature:
                     if propertiesBrain.getNumber(forIndex: 2) != 0 &&  propertiesBrain.getNumber(forIndex: 3) != 0 {
-                    cookButton.titleLabel?.text = K.cookLowTemp
-                    cookButton.setTitle(K.cookLowTemp, for: .normal)
-                    turnsCounter = 0
-                    updateTurnsLabel(turns: propertiesBrain.getNumber(forIndex: 3))
-                    cookingStage = .lowTemperature
+                        
+                        cookingStage = .lowTemperature
+                        turnsCounter = 0
+                        updateTurnsLabel(turns: propertiesBrain.getNumber(forIndex: 3))
+                        timerLabel.text = propertiesBrain.getNumber(forIndex: 2).description
                     }
+                    else {
+                        cookButton.setTitle(K.Content.FinishCooking, for: .normal)
+                        cookingStage = .finish
+                    }
+                    
                 case .lowTemperature:
-                    cookButton.setTitle(K.finishCooking, for: .normal)
+                    cookButton.setTitle(K.Content.FinishCooking, for: .normal)
                     cookingStage = .finish
+                    
                 case .finish:
-                    cookButton.setTitle(K.finishCooking, for: .normal)
+                    cookButton.setTitle(K.Content.FinishCooking, for: .normal)
                     cookingStage = .finish
                 }
                 turnsCounter = 0
@@ -104,87 +150,22 @@ class CookingViewController: UIViewController{
         return countTime
     }
     
-    @objc
-    func updateTimerProgressHighTemp() {
-        updateCooking(tempTime: propertiesBrain.getNumber(forIndex: 0), turns: propertiesBrain.getNumber(forIndex: 1), countTime: &highTempTimeInt)
-    }
-    
-    @objc
-    func updateTimerProgressLowTemp() {
-        updateCooking(tempTime: propertiesBrain.getNumber(forIndex: 2), turns: propertiesBrain.getNumber(forIndex: 3), countTime: &lowTempTimeInt)
-    }
-    
-    func setupCook(_ sender: UIButton, title: String, selector: Selector) {
-        timerProgressView.progress = 0
-        turnsLeftLabel.isHidden = false
-        sender.isHidden = true
-        
-        timerLabel.text = title
-        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: selector, userInfo: nil, repeats: true)
-    }
-    
-    @IBAction func cookButtonPressed(_ sender: UIButton) {
-        
+    //Update turns label
+    func updateTurnsLabel(turns: Int) {
         switch cookingStage {
         case .highTemperature:
-            setupCook(sender,
-                      title: propertiesBrain.getNumber(forIndex: 0).description,
-                      selector: #selector(updateTimerProgressHighTemp))
+            turnsLeftLabel.text = "\(K.Content.TurnsLeftAtHighTemp) \(turns * 2 - turnsCounter - 1)"
+            
         case .lowTemperature:
-            setupCook(sender,
-                      title: propertiesBrain.getNumber(forIndex: 2).description,
-                      selector: #selector(updateTimerProgressLowTemp))
-        case .finish:
-            //New alert with title
-            let alert = UIAlertController(title: K.questionAddMeatToHistory, message: nil, preferredStyle: .alert)
+            turnsLeftLabel.text = "\(K.Content.TurnsLeftAtLowTemp) \(turns * 2 - turnsCounter - 1)"
             
-            //New alert for adding to the history
-            let historyAlert = UIAlertController(title: K.addMeatToHistory, message: nil, preferredStyle: .alert)
-            let historyAlertTextField = AlertTextField(alert: historyAlert)
-            let nameTextField = historyAlertTextField.initializeTextField(text: K.name)
-            let noteTextField = historyAlertTextField.initializeTextField(text: K.notes)
-            
-            //Press Yes button on the alert window
-            alert.addAction(UIAlertAction(title: K.yes, style: .default, handler: { (UIAlertAction) in
-                self.present(historyAlert, animated: true)
-            }))
-            
-            //Press no button on the alert window
-            alert.addAction(UIAlertAction(title: K.no, style: .destructive, handler: { (UIAlertAction) in
-                self.navigationController?.popToRootViewController(animated: true)
-            }))
-            
-            //Press cancel on the alert window
-            alert.addAction(UIAlertAction(title: K.cancel, style: .cancel, handler: { (UIAlertAction) in
-            }))
-            
-            //Press add button on the history alerty window
-            historyAlert.addAction(UIAlertAction(title: K.add, style: .default, handler: { (UIAlertAction) in
-                
-                if nameTextField.text?.isEmpty == false {
-                    let history = RealmManager.shared.saveHistory(text: nameTextField.text!)
-                    
-                    for index in (0...3).reversed() {
-                        RealmManager.shared.saveHistoryItem(currentSteak: history, text: self.propertiesBrain.properties[index].title + self.propertiesBrain.properties[index].number.description)
-                    }
-                    
-                    if noteTextField.text?.isEmpty == false {
-                        RealmManager.shared.saveHistoryItem(currentSteak: history, text: noteTextField.text!)
-                    }
-                    self.navigationController?.popToRootViewController(animated: true)
-                }
-            }))
-            
-            //Press no button on the history alert window
-            historyAlert.addAction(UIAlertAction(title: K.cancel, style: .destructive, handler: { (UIAlertAction) in
-            }))
-            present(alert, animated: true)
+        case .finish: break
         }
-        
     }
     
+    //Play bell sound
     private func playSound() {
-        guard let url = Bundle.main.url(forResource: "bell", withExtension: "wav") else {
+        guard let url = Bundle.main.url(forResource: K.Sound.Bell, withExtension: K.Sound.wav) else {
             return
         }
         do {

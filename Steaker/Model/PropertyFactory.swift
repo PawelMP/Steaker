@@ -16,10 +16,12 @@ struct PropertyFactory {
         Property(title: " Amount of frying on the same side at low temp ")
     ]
     
+    //Set property number for IndexPath
     mutating func setNumber(with number: Int?, forIndex index: Int) {
         properties[index].number = number ?? 0
     }
 
+    //Get property number for IndexPath
     func getNumber(forIndex index: Int) -> Int {
         return properties[index].number
     }

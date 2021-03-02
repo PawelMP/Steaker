@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 
 class History: Object {
-    @objc dynamic var name: String = ""
+    @objc dynamic var name: String?
     let items = List<HistoryItem>()
     @objc dynamic var dateCreated: Date?
 }

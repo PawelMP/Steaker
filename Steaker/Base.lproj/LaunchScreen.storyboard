@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -19,24 +21,21 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="meat" translatesAutoresizingMaskIntoConstraints="NO" id="PcG-Za-soD">
-                                <rect key="frame" x="97" y="368" width="220" height="160"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="160" id="Xo6-hR-Y9b"/>
-                                </constraints>
+                                <rect key="frame" x="100" y="263.5" width="214" height="369"/>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="PcG-Za-soD" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="97" id="19h-OA-hDZ"/>
+                            <constraint firstItem="PcG-Za-soD" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="100" id="19h-OA-hDZ"/>
                             <constraint firstItem="jcW-kK-V6O" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="HIl-S4-6BY"/>
                             <constraint firstAttribute="bottom" secondItem="jcW-kK-V6O" secondAttribute="bottom" id="VwC-3r-VSd"/>
                             <constraint firstAttribute="trailing" secondItem="jcW-kK-V6O" secondAttribute="trailing" id="X9r-ed-QyG"/>
                             <constraint firstItem="jcW-kK-V6O" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="boD-c4-5A9"/>
-                            <constraint firstAttribute="trailing" secondItem="PcG-Za-soD" secondAttribute="trailing" constant="97" id="n48-cT-Sz6"/>
+                            <constraint firstAttribute="trailing" secondItem="PcG-Za-soD" secondAttribute="trailing" constant="100" id="n48-cT-Sz6"/>
                             <constraint firstItem="PcG-Za-soD" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="nCS-qp-wEu"/>
                             <constraint firstItem="PcG-Za-soD" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="yta-D8-SED"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -47,5 +46,8 @@
     <resources>
         <image name="Background" width="400" height="400"/>
         <image name="meat" width="442.5" height="369"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

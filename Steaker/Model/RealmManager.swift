@@ -12,57 +12,61 @@ import RealmSwift
 struct RealmManager {
     
     static let shared = RealmManager()
-    let realm = try! Realm()
     
     private init() {
     }
     
+    //Load History objects from Realm
     func loadHistory() -> Results<History> {
-        return realm.objects(History.self).sorted(byKeyPath: K.dateCreated, ascending: false)
+        return K.API.HISTORY_REF.sorted(byKeyPath: K.Content.DateCreated, ascending: false)
     }
     
+    //Load HistoryItem objects from Realm
     func loadHistoryItems(selectedHistory: History) -> Results<HistoryItem> {
-        return selectedHistory.items.sorted(byKeyPath: K.dateCreated, ascending: false)
+        return selectedHistory.items.sorted(byKeyPath: K.Content.DateCreated, ascending: false)
     }
     
     func saveCooking() {
         
     }
     
+    //Save History object to Realm
     @discardableResult func saveHistory(text: String) -> History {
         let newHistory = History()
         do {
-            try realm.write(){
+            try K.API.DB_REF.write(){
                 newHistory.name = text
                 newHistory.dateCreated = Date()
-                realm.add(newHistory)
+                K.API.DB_REF.add(newHistory)
             }
         } catch {
-            print("Error saving history item to Realm, \(error)")
+            print(error.localizedDescription)
         }
         return newHistory
     }
     
+    //Save HistoryItem to Realm
     func saveHistoryItem(currentSteak: History, text: String) {
         do {
-            try self.realm.write() {
+            try K.API.DB_REF.write() {
                 let newHistoryItem = HistoryItem()
                 newHistoryItem.title = text
                 newHistoryItem.dateCreated = Date()
                 currentSteak.items.append(newHistoryItem)
             }
         } catch {
-            print("Error adding new category \(error)")
+            print(error.localizedDescription)
         }
     }
     
+    //Remove object from Realm
     func remove(category: Object) {
         do {
-            try realm.write {
-                realm.delete(category)
+            try K.API.DB_REF.write {
+                K.API.DB_REF.delete(category)
             }
         } catch {
-            print("Error deleting category context \(error)")
+            print(error.localizedDescription)
         }
     }
     

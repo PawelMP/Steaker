@@ -9,11 +9,13 @@
 import UIKit
 
 class PropertiesViewController: UITableViewController {
-
+    
     @IBOutlet weak var nextButton: UIButton!
     
     private var propertiesBrain = PropertyFactory()
     private var currentTextField: UITextField?
+    
+    // MARK: - View controller lifecycle methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,33 +29,28 @@ class PropertiesViewController: UITableViewController {
     
     private func setupTableView() {
         tableView.register(UINib(nibName: PropertyCell.cellNibName, bundle: nil), forCellReuseIdentifier: PropertyCell.cellIdentifier)
+        tableView.delaysContentTouches = false
     }
     
-    // MARK: - Button methods
+    // MARK: - UI action methods
+    
     @IBAction func nextButtonPressed(_ sender: UIButton) {
         if let currentTextField = currentTextField {
-                    currentTextField.resignFirstResponder()
-                }
+            currentTextField.resignFirstResponder()
+        }
         sender.alpha = 1
+        
         let highTempTime = propertiesBrain.getNumber(forIndex: 0)
         let highTempTurns = propertiesBrain.getNumber(forIndex: 1)
         
         if highTempTime > 0 && highTempTurns > 0 {
             performSegue(withIdentifier: K.segues.cookingSegue, sender: self)
         } else {
-            
-            //New alert with title
-            let alert = UIAlertController(title: K.settingsGreaterThanZero, message: nil, preferredStyle: .alert)
-                
-            //Press ok button on the alert window
-            alert.addAction(UIAlertAction(title: K.ok, style: .cancel, handler: { (UIAlertAction) in
-            }))
-            
-            //Present alert
-            present(alert, animated: true)
+            let alert = Alert()
+            alert.createAlert(title: K.Content.SettingsGreaterThanZero, viewController: self)
         }
     }
-    
+
     @IBAction func nextButtonTouched(_ sender: UIButton) {
         sender.alpha = 0.5
     }
@@ -72,13 +69,47 @@ class PropertiesViewController: UITableViewController {
     }
 }
 
+// MARK: - Table view data source
+
+extension PropertiesViewController  {
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return propertiesBrain.properties.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PropertyCell.cellIdentifier, for: indexPath) as? PropertyCell else {
+            return UITableViewCell()
+        }
+        
+        cell.setupCell(with: propertiesBrain, for: indexPath)
+        cell.timeTextField.delegate = self
+        
+        return cell
+    }
+}
+
+// MARK: - Table view delegate
+
+extension PropertiesViewController {
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 50
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footerView = UIView()
+        return footerView
+    }
+}
+
 // MARK: - TextField Delegate Methods
+
 extension PropertiesViewController: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.text = ""
+        textField.text = nil
         textField.placeholder = 0.description
-        textField.addDoneButtonOnKeyboard()
         currentTextField = textField
     }
     
@@ -96,30 +127,3 @@ extension PropertiesViewController: UITextFieldDelegate {
     }
 }
 
-    // MARK: - Table view data source
-extension PropertiesViewController  {
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return propertiesBrain.properties.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: PropertyCell.cellIdentifier, for: indexPath) as? PropertyCell else {
-            return UITableViewCell()
-        }
-        
-        cell.setupCell(with: propertiesBrain, for: indexPath)
-        cell.timeTextField.delegate = self
-
-        return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-       return 50
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footerView = UIView()
-        return footerView
-    }
-}

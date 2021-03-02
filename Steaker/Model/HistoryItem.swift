@@ -10,8 +10,8 @@ import Foundation
 import RealmSwift
 
 class HistoryItem: Object {
-    @objc dynamic var title: String = ""
-    @objc dynamic var content: String = ""
+    @objc dynamic var title: String?
+    @objc dynamic var content: String?
     @objc dynamic var dateCreated: Date?
     var parentCategory = LinkingObjects(fromType: History.self, property: "items")
 }
