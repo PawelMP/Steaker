@@ -1,4 +1,5 @@
 ${PODS_ROOT}/Target Support Files/Pods-Steaker/Pods-Steaker-frameworks.sh
+${BUILT_PRODUCTS_DIR}/IQKeyboardManager/IQKeyboardManager.framework
 ${BUILT_PRODUCTS_DIR}/Realm/Realm.framework
 ${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework
 ${BUILT_PRODUCTS_DIR}/SwipeCellKit/SwipeCellKit.framework

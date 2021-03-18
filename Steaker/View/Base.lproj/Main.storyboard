@@ -329,7 +329,7 @@
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6sZ-Py-wXo">
                                                 <rect key="frame" x="0.0" y="34.5" width="334" height="38.5"/>
                                                 <fontDescription key="fontDescription" name="Noteworthy-Light" family="Noteworthy" pointSize="18"/>
-                                                <textInputTraits key="textInputTraits"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textField>
                                         </subviews>
                                         <constraints>
@@ -349,7 +349,7 @@
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="C9D-Qh-DXx">
                                                 <rect key="frame" x="0.0" y="34.5" width="334" height="38.5"/>
                                                 <fontDescription key="fontDescription" name="Noteworthy-Light" family="Noteworthy" pointSize="18"/>
-                                                <textInputTraits key="textInputTraits"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textField>
                                         </subviews>
                                         <constraints>

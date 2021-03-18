@@ -9,4 +9,5 @@ target 'Steaker' do
 
 pod 'RealmSwift','4.4.0'
 pod 'SwipeCellKit'
+pod 'IQKeyboardManager'
 end

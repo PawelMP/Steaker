@@ -99,7 +99,7 @@ class CookingViewController: UIViewController{
     }
     
     //Update cooking time
-    @discardableResult func updateCooking (tempTime: Int, turns: Int, countTime: inout Int) -> Int {
+    func updateCooking (tempTime: Int, turns: Int, countTime: inout Int) {
         let accuracy = 1.0/Float(tempTime)
         updateTurnsLabel(turns: turns)
         
@@ -147,7 +147,7 @@ class CookingViewController: UIViewController{
                 countTime = tempTime
             }
         }
-        return countTime
+        //return countTime
     }
     
     //Update turns label
